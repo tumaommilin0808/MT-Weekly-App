@@ -996,19 +996,39 @@ let activeGroups=new Set();
 let activeStatuses=new Set(STATUSES);
 let viewMode='list';
 
-window.onload=()=> {
-    if (typeof google !=='undefined') {
-        google.script.run.withSuccessHandler(initApp).compareRevisions();
-    }
+const API_URL="https://script.google.com/macros/s/AKfycbxeSFFtpkmF_G46wUz35dFgx-Oz7IAS556fzrciqacnCAeloLOynZrlNAFL3aiiLxqg/exec";
 
-    else {
-        document.getElementById('loading').innerText="Google Apps Script not found.";
-    }
+window.onload=()=> {
+    loadInitialData();
 }
 
 ;
 
-function initApp(result) {
+function loadInitialData() {
+    const loadingEl=document.getElementById('loading');
+
+    if (typeof google !=='undefined' && google.script && google.script.run) {
+        google.script.run
+            .withSuccessHandler(initApp)
+            .withFailureHandler(err=> {
+                loadingEl.innerText="โหลดข้อมูลไม่สำเร็จ: " + (err && err.message ? err.message : "Unknown error");
+            })
+            .compareRevisions();
+        return;
+    }
+
+    fetch(API_URL + '?action=compareRevisions', {
+        method: 'GET'
+    })
+        .then(res=> {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+        })
+        .then(initApp)
+        .catch(err=> {
+            loadingEl.innerText="Sync ไม่สำเร็จ: " + (err && err.message ? err.message : "Unknown error");
+        });
+}function initApp(result) {
     if ( !result || !result.allTasks) {
         document.getElementById('loading').innerText="เกิดข้อผิดพลาดในการโหลดข้อมูล";
         return;
@@ -1521,5 +1541,6 @@ document.addEventListener('keydown', e=> {
         if (e.key==='Escape') closeModalDirect();
     });
 </script></body></html>
+
 
 
