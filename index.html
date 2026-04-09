@@ -1179,7 +1179,16 @@ function buildGroup(containerId, items, activeSet) {
     all.textContent='ALL';
 
     all.onclick=()=> {
-        items.forEach(i=> activeSet.add(i));
+        const isAllSelected=items.length > 0 && activeSet.size===items.length;
+
+        if (isAllSelected) {
+            activeSet.clear();
+        }
+
+        else {
+            items.forEach(i=> activeSet.add(i));
+        }
+
         updateFilters();
         render();
     }
@@ -1541,6 +1550,7 @@ document.addEventListener('keydown', e=> {
         if (e.key==='Escape') closeModalDirect();
     });
 </script></body></html>
+
 
 
 
