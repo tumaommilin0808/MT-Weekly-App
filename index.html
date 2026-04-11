@@ -416,6 +416,12 @@ main {
     border: 1px solid var(--unplan);
 }
 
+.badge.simple-lock {
+    background: #fef9c3;
+    color: #a16207;
+    border: 1px solid #eab308;
+}
+
 .badge.group {
     background: rgba(128, 128, 128, .1);
     color: var(--muted);
@@ -532,6 +538,10 @@ main {
 
 .list-table tr.is-loto td {
     background: var(--loto-bg);
+}
+
+.list-table tr.is-simple-lock td {
+    background: #fefce8;
 }
 
 .list-table tr.is-sis td {
@@ -1607,6 +1617,44 @@ input:focus-visible {
     background: #64748b;
 }
 
+.dispatch-frame .task-card.safety-loto {
+    background: #fff4e6;
+    border-color: #fdba74;
+}
+
+.dispatch-frame .task-card.safety-loto .task-strip {
+    background: #ea580c;
+}
+
+.dispatch-frame .task-card.safety-loto .task-chip.is-warn {
+    background: #ffedd5;
+    border-color: #fb923c;
+    color: #c2410c;
+}
+
+.dispatch-frame .task-card.safety-loto .task-footer .task-resp:last-child {
+    color: #c2410c;
+}
+
+.dispatch-frame .task-card.safety-simple-lock {
+    background: #fffde8;
+    border-color: #facc15;
+}
+
+.dispatch-frame .task-card.safety-simple-lock .task-strip {
+    background: #eab308;
+}
+
+.dispatch-frame .task-card.safety-simple-lock .task-chip.is-warn {
+    background: #fef9c3;
+    border-color: #eab308;
+    color: #a16207;
+}
+
+.dispatch-frame .task-card.safety-simple-lock .task-footer .task-resp:last-child {
+    color: #a16207;
+}
+
 body:not(.theme-light) .dispatch-frame {
     background: rgba(15, 23, 42, 0.92);
 }
@@ -1850,6 +1898,21 @@ function getAreaClass(areaValue) {
     if (area==='UT') return 'area-ut';
     if (area==='SSP/UT') return 'area-ssput';
     return 'area-other';
+}
+
+function getSafetyMode(swpValue) {
+    const text=(swpValue || '').toString().toUpperCase().replace(/\s+/g, ' ').trim();
+    const compact=text.replace(/\s+/g, '');
+
+    if (compact.includes('SIMPLELOCK')) {
+        return 'simple-lock';
+    }
+
+    if (text.includes('LOTO') || /(^|[^A-Z0-9])LB([^A-Z0-9]|$)/.test(text) || /L\s*\/\s*B/.test(text)) {
+        return 'loto-lb';
+    }
+
+    return '';
 }
 
 function sortAreas(values) {
@@ -2489,7 +2552,10 @@ function renderWeek(data) {
 function makeCard(t) {
     const card=document.createElement('div');
     const swpText=(t.swp || '').toUpperCase();
-    const isLoto=swpText.includes('LOTO') || swpText.includes('SIMPLE LOCK');
+    const safetyMode=getSafetyMode(swpText);
+    const isLoto=safetyMode==='loto-lb';
+    const isSimpleLock=safetyMode==='simple-lock';
+    const isLockTask=!!safetyMode;
     const isSis=(t.moc||'').toUpperCase().includes('SIS') || (t.jobType||'').toUpperCase().includes('SIS') || (t.group||'').toUpperCase().includes('SIS');
     const isNew=t.status==='NEW';
     const isCan=t.status==='CANCELLED';
@@ -2504,14 +2570,17 @@ function makeCard(t) {
     }
 
     `;
-    if(isLoto) card.classList.add('is-loto');
+    if(isLockTask) card.classList.add('is-loto');
+    if(isLoto) card.classList.add('safety-loto');
+    if(isSimpleLock) card.classList.add('safety-simple-lock');
     if(isSis) card.classList.add('is-sis');
     if(isCan) card.classList.add('task-cancelled');
 
     let chips=`<span class="task-chip">${t.jobType || '-'}</span>`;
     if(isNew) chips+=`<span class="task-chip is-danger">NEW</span>`;
     if(isCan) chips+=`<span class="task-chip is-danger">CANCEL</span>`;
-    if(isLoto) chips+=`<span class="task-chip is-warn">LOTO</span>`;
+    if(isLoto) chips+=`<span class="task-chip is-warn">LOTO/LB</span>`;
+    if(isSimpleLock) chips+=`<span class="task-chip is-warn">SIMPLE LOCK</span>`;
     if(isSis) chips+=`<span class="task-chip is-accent">SIS</span>`;
 
     const whenText=(t.day || '-') + ' • ' + formatShortDate(t.date || '');
@@ -2529,7 +2598,7 @@ function makeCard(t) {
             <div class="task-chip-row">${chips}</div>
             <div class="task-footer"><div class="task-resp">${t.group || '-'}</div><div class="task-resp">${t.area || '-'}</div></div>
         </div>`;
-    card.onclick=()=>openModal(t, isLoto, isSis, isNew, isCan);
+    card.onclick=()=>openModal(t, safetyMode, isSis, isNew, isCan);
     return card;
 }
 
@@ -2539,24 +2608,17 @@ function renderList(data) {
 
     data.forEach(t=> {
             const swpText=(t.swp || '').toUpperCase();
-            const isLoto=swpText.includes('LOTO') || swpText.includes('SIMPLE LOCK');
+            const safetyMode=getSafetyMode(swpText);
+            const isLoto=safetyMode==='loto-lb';
+            const isSimpleLock=safetyMode==='simple-lock';
+            const isLockTask=!!safetyMode;
             const isSis=(t.moc||'').toUpperCase().includes('SIS') || (t.jobType||'').toUpperCase().includes('SIS') || (t.group||'').toUpperCase().includes('SIS');
 
             const tr=document.createElement('tr');
-
-            tr.className=`status-${
-                t.status.toLowerCase()
-            }
-
-            ${
-                isLoto?'is-loto':''
-            }
-
-            ${
-                isSis?'is-sis':''
-            }
-
-            `;
+            tr.className=`status-${t.status.toLowerCase()}`;
+            if (isLoto) tr.classList.add('is-loto');
+            if (isSimpleLock) tr.classList.add('is-simple-lock');
+            if (isSis) tr.classList.add('is-sis');
 
             let statusBadge='';
             if(t.status==='NEW') statusBadge='<br><span class="badge new-badge" style="margin-top:6px">NEW</span>';
@@ -2601,7 +2663,7 @@ function renderList(data) {
                 t.workType||'-'
             }
 
-            </span></td> <td style="font-family:var(--mono);font-size:12px; ${isLoto?'color:var(--unplan);font-weight:700':''}" >${
+            </span></td> <td style="font-family:var(--mono);font-size:12px; ${isLockTask?'color:var(--unplan);font-weight:700':''}" >${
                 t.swp||'-'
             }
 
@@ -2615,16 +2677,19 @@ function renderList(data) {
 
             </td> `;
             tr.style.cursor='pointer';
-            tr.onclick=()=> openModal(t, isLoto, isSis, t.status==='NEW', t.status==='CANCELLED');
+            tr.onclick=()=> openModal(t, safetyMode, isSis, t.status==='NEW', t.status==='CANCELLED');
             body.appendChild(tr);
         });
 }
 
-function openModal(t, isLoto, isSis, isNew, isCan) {
+function openModal(t, safetyMode, isSis, isNew, isCan) {
+    const isLoto=safetyMode==='loto-lb';
+    const isSimpleLock=safetyMode==='simple-lock';
     let badges='';
     if(isNew) badges+=`<span class="badge new-badge">NEW</span>`;
     if(isCan) badges+=`<span class="badge cancel">CANCELLED</span>`;
-    if(isLoto) badges+=`<span class="badge loto">LOTO</span>`;
+    if(isLoto) badges+=`<span class="badge loto">LOTO/LB</span>`;
+    if(isSimpleLock) badges+=`<span class="badge simple-lock">SIMPLE LOCK</span>`;
     if(isSis) badges+=`<span class="badge sis">SIS</span>`;
 
     badges+=`<span class="badge plan">${
