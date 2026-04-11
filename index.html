@@ -1059,8 +1059,8 @@ body {
 }
 
 .dispatch-frame .week-grid {
-    grid-template-columns: repeat(7, minmax(180px, 1fr));
-    gap: 8px;
+    grid-template-columns: repeat(7, minmax(220px, 1fr));
+    gap: 10px;
 }
 
 .dispatch-frame .day-col {
@@ -1092,9 +1092,8 @@ body {
 
 .dispatch-frame .day-tasks {
     padding: 8px;
-    gap: 7px;
-    max-height: 560px;
-    overflow: auto;
+    gap: 9px;
+    overflow: visible;
 }
 
 .dispatch-frame .task-card {
@@ -1104,13 +1103,13 @@ body {
     background: #fff;
     padding: 0;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+    box-shadow: 0 2px 7px rgba(15, 23, 42, 0.07);
 }
 
 .dispatch-frame .task-card:hover {
     border-color: #93c5fd;
     transform: translateY(-1px);
-    box-shadow: 0 8px 16px rgba(15, 23, 42, 0.12);
+    box-shadow: 0 8px 14px rgba(15, 23, 42, 0.11);
 }
 
 .dispatch-frame .task-strip {
@@ -1127,7 +1126,7 @@ body {
 }
 
 .dispatch-frame .task-card-inner {
-    padding: 8px 9px 9px;
+    padding: 9px 10px 10px;
 }
 
 .dispatch-frame .task-meta-line {
@@ -1135,7 +1134,7 @@ body {
     align-items: center;
     justify-content: space-between;
     gap: 6px;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 }
 
 .dispatch-frame .task-ref {
@@ -1146,16 +1145,17 @@ body {
 }
 
 .dispatch-frame .task-equip {
-    font-size: 12px;
-    margin-bottom: 4px;
+    font-size: 13px;
+    margin-bottom: 5px;
     color: #0f172a;
+    line-height: 1.35;
 }
 
 .dispatch-frame .task-desc {
-    font-size: 11px;
-    line-height: 1.35;
-    -webkit-line-clamp: 2;
-    margin-bottom: 6px;
+    font-size: 12px;
+    line-height: 1.4;
+    -webkit-line-clamp: 3;
+    margin-bottom: 7px;
     color: #475569;
 }
 
@@ -1163,12 +1163,12 @@ body {
     display: flex;
     gap: 4px;
     flex-wrap: wrap;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
 }
 
 .dispatch-frame .task-chip {
     font-family: var(--mono);
-    font-size: 9px;
+    font-size: 10px;
     padding: 2px 6px;
     border-radius: 999px;
     border: 1px solid #cbd5e1;
@@ -1199,10 +1199,14 @@ body {
 .dispatch-frame .task-footer {
     margin-top: 0;
     padding-top: 6px;
+    gap: 8px;
 }
 
 .dispatch-frame .task-resp {
-    font-size: 10px;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 body.theme-light .dispatch-frame {
@@ -2082,25 +2086,26 @@ function makeCard(t) {
     if(isSis) card.classList.add('is-sis');
     if(isCan) card.classList.add('task-cancelled');
 
-    let chips=`<span class="task-chip">${t.jobType || '-'}</span><span class="task-chip">${t.group || '-'}</span>`;
+    let chips=`<span class="task-chip">${t.jobType || '-'}</span>`;
     if(isNew) chips+=`<span class="task-chip is-danger">NEW</span>`;
     if(isCan) chips+=`<span class="task-chip is-danger">CANCEL</span>`;
     if(isLoto) chips+=`<span class="task-chip is-warn">LOTO</span>`;
     if(isSis) chips+=`<span class="task-chip is-accent">SIS</span>`;
 
-    const refCode=(t.rev ? t.rev : 'REV') + ' • ' + (t.day || '-');
+    const whenText=(t.day || '-') + ' • ' + formatShortDate(t.date || '');
+    const revText=t.rev ? t.rev : 'REV';
     const description=t.description || '-';
 
     card.innerHTML=`<div class="task-strip"></div>
         <div class="task-card-inner">
             <div class="task-meta-line">
-                <div class="task-ref">${refCode}</div>
-                <div class="task-ref">${formatShortDate(t.date || '')}</div>
+                <div class="task-ref">${whenText}</div>
+                <div class="task-ref">${revText}</div>
             </div>
             <div class="task-equip">${t.equipment || 'N/A'}</div>
             <div class="task-desc">${description}</div>
             <div class="task-chip-row">${chips}</div>
-            <div class="task-footer"><div class="task-resp">${t.resp || '-'}</div><div class="task-resp">${t.area || '-'}</div></div>
+            <div class="task-footer"><div class="task-resp">${t.group || '-'}</div><div class="task-resp">${t.area || '-'}</div></div>
         </div>`;
     card.onclick=()=>openModal(t, isLoto, isSis, isNew, isCan);
     return card;
