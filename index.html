@@ -1338,64 +1338,69 @@ body:not(.theme-light) .dispatch-frame .task-resp {
 /* === Designer Refresh Layer (Readable + Comfortable) === */
 body {
     background:
-        radial-gradient(900px 520px at 8% 4%, rgba(14, 165, 233, 0.2), transparent 60%),
-        radial-gradient(780px 420px at 98% 6%, rgba(59, 130, 246, 0.12), transparent 58%),
-        #dbe4ec;
+        radial-gradient(900px 520px at 8% 4%, rgba(14, 116, 144, 0.16), transparent 60%),
+        radial-gradient(820px 440px at 98% 6%, rgba(37, 99, 235, 0.1), transparent 58%),
+        linear-gradient(180deg, #e6edf4 0%, #d9e2eb 100%);
     padding: 18px;
 }
 
 .dispatch-shell {
-    gap: 16px;
+    gap: 18px;
     min-height: calc(100vh - 36px);
 }
 
 .dispatch-sidebar {
-    width: 168px;
-    padding: 12px 10px;
-    border-radius: 14px;
-    background: linear-gradient(180deg, #081327 0%, #0d2038 100%);
+    width: 196px;
+    padding: 14px 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(37, 99, 235, 0.24);
+    background: linear-gradient(180deg, #06152b 0%, #0a2240 55%, #0a2a49 100%);
+    box-shadow: 0 14px 34px rgba(2, 6, 23, 0.24);
 }
 
 .dispatch-brand {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    margin-bottom: 2px;
+    width: 46px;
+    height: 46px;
+    border-radius: 13px;
+    margin-bottom: 4px;
 }
 
 .dispatch-side-title {
     width: 100%;
-    color: #93c5fd;
+    color: #bfdbfe;
     font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.8px;
+    font-size: 12px;
+    letter-spacing: 0.9px;
     text-transform: uppercase;
-    margin: 2px 0 8px;
+    margin: 2px 0 10px;
     text-align: left;
 }
 
 .dispatch-nav {
     width: 100%;
-    gap: 7px;
+    gap: 8px;
 }
 
 .dispatch-nav-btn {
     width: 100%;
-    height: 36px;
-    border-radius: 9px;
-    padding: 0 10px;
+    height: 40px;
+    border-radius: 10px;
+    padding: 0 12px;
     text-align: left;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.3px;
+    font-size: 12px;
+    font-weight: 650;
+    letter-spacing: 0.35px;
     color: #dbeafe;
-    border-color: rgba(148, 163, 184, 0.26);
+    border-color: rgba(148, 163, 184, 0.3);
+    background: rgba(2, 8, 23, 0.16);
 }
 
 .dispatch-nav-btn:hover,
 .dispatch-nav-btn.active {
-    background: #1d4ed8;
+    background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
     color: #fff;
+    border-color: rgba(147, 197, 253, 0.68);
+    box-shadow: 0 8px 20px rgba(29, 78, 216, 0.38);
 }
 
 .dispatch-nav-btn:focus-visible,
@@ -1411,7 +1416,7 @@ input:focus-visible {
 .dispatch-board-top {
     height: 50px;
     padding: 0 16px;
-    background: rgba(255, 255, 255, 0.93);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.96));
 }
 
 .dispatch-board-title {
@@ -1420,7 +1425,7 @@ input:focus-visible {
 }
 
 .dispatch-frame {
-    background: rgba(255, 255, 255, 0.94);
+    background: rgba(255, 255, 255, 0.95);
 }
 
 .dispatch-frame header {
@@ -1431,7 +1436,7 @@ input:focus-visible {
 
 .dispatch-frame .filter-bar {
     padding: 11px 18px;
-    background: rgba(248, 250, 252, 0.95);
+    background: rgba(241, 245, 249, 0.95);
 }
 
 .dispatch-frame main {
@@ -1453,6 +1458,21 @@ input:focus-visible {
     overflow-x: auto;
     overflow-y: hidden;
     height: 14px;
+    scrollbar-color: rgba(71, 85, 105, 0.6) rgba(148, 163, 184, 0.2);
+}
+
+.dispatch-frame .week-scroll-top::-webkit-scrollbar {
+    height: 10px;
+}
+
+.dispatch-frame .week-scroll-top::-webkit-scrollbar-track {
+    background: rgba(148, 163, 184, 0.2);
+    border-radius: 999px;
+}
+
+.dispatch-frame .week-scroll-top::-webkit-scrollbar-thumb {
+    background: rgba(71, 85, 105, 0.58);
+    border-radius: 999px;
 }
 
 .dispatch-frame .week-scroll-top-inner {
@@ -1463,6 +1483,7 @@ input:focus-visible {
     overflow-x: auto;
     overflow-y: visible;
     scrollbar-width: none;
+    scroll-snap-type: x mandatory;
 }
 
 .dispatch-frame .week-grid-wrap::-webkit-scrollbar {
@@ -1470,17 +1491,19 @@ input:focus-visible {
 }
 
 .dispatch-frame .week-grid {
-    grid-template-columns: repeat(7, minmax(250px, 1fr));
+    --day-col-width: 250px;
+    grid-template-columns: repeat(7, var(--day-col-width));
     gap: 12px;
     align-items: start;
-    width: max-content;
-    min-width: 100%;
+    width: calc((var(--day-col-width) * 7) + (12px * 6));
+    min-width: calc((var(--day-col-width) * 5) + (12px * 4));
 }
 
 .dispatch-frame .day-col {
     border-radius: 10px;
     border: 1px solid rgba(148, 163, 184, 0.32);
     background: #f8fafc;
+    scroll-snap-align: start;
 }
 
 .dispatch-frame .day-header {
@@ -1499,6 +1522,8 @@ input:focus-visible {
 
 .dispatch-frame .task-card {
     border-radius: 8px;
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
 }
 
 .dispatch-frame .task-card-inner {
@@ -1518,6 +1543,70 @@ input:focus-visible {
     font-size: 10px;
 }
 
+.dispatch-frame .task-footer .task-resp:last-child {
+    font-weight: 700;
+}
+
+.dispatch-frame .task-card.area-cp .task-strip {
+    background: #2563eb;
+}
+
+.dispatch-frame .task-card.area-cp .task-footer .task-resp:last-child {
+    color: #1d4ed8;
+}
+
+.dispatch-frame .task-card.area-isbl .task-strip {
+    background: #059669;
+}
+
+.dispatch-frame .task-card.area-isbl .task-footer .task-resp:last-child {
+    color: #047857;
+}
+
+.dispatch-frame .task-card.area-b6lg .task-strip {
+    background: #7c3aed;
+}
+
+.dispatch-frame .task-card.area-b6lg .task-footer .task-resp:last-child {
+    color: #6d28d9;
+}
+
+.dispatch-frame .task-card.area-ccb .task-strip {
+    background: #ea580c;
+}
+
+.dispatch-frame .task-card.area-ccb .task-footer .task-resp:last-child {
+    color: #c2410c;
+}
+
+.dispatch-frame .task-card.area-ssp .task-strip {
+    background: #0f766e;
+}
+
+.dispatch-frame .task-card.area-ssp .task-footer .task-resp:last-child {
+    color: #0f766e;
+}
+
+.dispatch-frame .task-card.area-ut .task-strip {
+    background: #ca8a04;
+}
+
+.dispatch-frame .task-card.area-ut .task-footer .task-resp:last-child {
+    color: #a16207;
+}
+
+.dispatch-frame .task-card.area-ssput .task-strip {
+    background: #0284c7;
+}
+
+.dispatch-frame .task-card.area-ssput .task-footer .task-resp:last-child {
+    color: #0369a1;
+}
+
+.dispatch-frame .task-card.area-other .task-strip {
+    background: #64748b;
+}
+
 body:not(.theme-light) .dispatch-frame {
     background: rgba(15, 23, 42, 0.92);
 }
@@ -1532,17 +1621,17 @@ body:not(.theme-light) .dispatch-nav-btn {
 
 @media (max-width: 1240px) {
     .dispatch-sidebar {
-        width: 142px;
+        width: 168px;
     }
 
     .dispatch-frame .week-grid {
-        grid-template-columns: repeat(7, minmax(220px, 1fr));
+        --day-col-width: 230px;
     }
 }
 
 @media (max-width: 980px) {
     .dispatch-frame .week-grid {
-        grid-template-columns: repeat(7, minmax(200px, 1fr));
+        --day-col-width: 210px;
     }
 }
 
@@ -1749,6 +1838,18 @@ function normalizeArea(value) {
         .replace(/\s+/g, ' ')
         .trim()
         .toUpperCase();
+}
+
+function getAreaClass(areaValue) {
+    const area=normalizeArea(areaValue);
+    if (area.includes('CP')) return 'area-cp';
+    if (area.includes('ISBL')) return 'area-isbl';
+    if (area.includes('B6/LG') || area.includes('B6LG')) return 'area-b6lg';
+    if (area==='CCB') return 'area-ccb';
+    if (area==='SSP') return 'area-ssp';
+    if (area==='UT') return 'area-ut';
+    if (area==='SSP/UT') return 'area-ssput';
+    return 'area-other';
 }
 
 function sortAreas(values) {
@@ -2288,7 +2389,12 @@ function syncWeekScrollWidth() {
         return;
     }
 
-    const contentWidth=Math.max(grid.scrollWidth, wrap.clientWidth);
+    const gap=12;
+    const visibleColumns=5;
+    const dayWidth=Math.max(190, Math.floor((wrap.clientWidth - (gap * (visibleColumns - 1))) / visibleColumns));
+    grid.style.setProperty('--day-col-width', dayWidth + 'px');
+
+    const contentWidth=(dayWidth * 7) + (gap * 6);
     topInner.style.width=contentWidth + 'px';
     top.style.display=contentWidth > wrap.clientWidth + 2 ? 'block' : 'none';
     top.scrollLeft=wrap.scrollLeft;
@@ -2387,9 +2493,14 @@ function makeCard(t) {
     const isSis=(t.moc||'').toUpperCase().includes('SIS') || (t.jobType||'').toUpperCase().includes('SIS') || (t.group||'').toUpperCase().includes('SIS');
     const isNew=t.status==='NEW';
     const isCan=t.status==='CANCELLED';
+    const areaClass=getAreaClass(t.area);
 
     card.className=`task-card status-${
         t.status.toLowerCase()
+    }
+
+    ${
+        areaClass
     }
 
     `;
