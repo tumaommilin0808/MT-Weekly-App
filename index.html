@@ -1439,10 +1439,42 @@ input:focus-visible {
     background: rgba(241, 245, 249, 0.88);
 }
 
+.dispatch-frame .week-view-shell {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dispatch-frame .week-view-shell.hidden {
+    display: none;
+}
+
+.dispatch-frame .week-scroll-top {
+    overflow-x: auto;
+    overflow-y: hidden;
+    height: 14px;
+}
+
+.dispatch-frame .week-scroll-top-inner {
+    height: 1px;
+}
+
+.dispatch-frame .week-grid-wrap {
+    overflow-x: auto;
+    overflow-y: visible;
+    scrollbar-width: none;
+}
+
+.dispatch-frame .week-grid-wrap::-webkit-scrollbar {
+    height: 0;
+}
+
 .dispatch-frame .week-grid {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(7, minmax(250px, 1fr));
     gap: 12px;
     align-items: start;
+    width: max-content;
+    min-width: 100%;
 }
 
 .dispatch-frame .day-col {
@@ -1504,13 +1536,13 @@ body:not(.theme-light) .dispatch-nav-btn {
     }
 
     .dispatch-frame .week-grid {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-columns: repeat(7, minmax(220px, 1fr));
     }
 }
 
 @media (max-width: 980px) {
     .dispatch-frame .week-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(7, minmax(200px, 1fr));
     }
 }
 
@@ -1527,7 +1559,7 @@ body:not(.theme-light) .dispatch-nav-btn {
 }
 </style></head><body class="theme-light"><header><div class="logo"><div class="logo-icon">MT</div><div><div class="logo-text">WEEKLY SCHEDULING</div><div class="logo-sub" id="logoSub">Loading DB...</div></div></div><div class="header-right"><button class="theme-toggle" onclick="toggleTheme()"><span id="themeIcon">🌙 โหมดมืด</span></button><div class="realtime-clock"><div id="clockTime" style="font-size: 16px;">00:00:00</div><div id="clockDate" style="font-size: 11px; font-weight: 400; color: var(--muted); margin-top: 2px;">DD MMM YYYY</div></div><div class="header-stats" id="headerStats" style="display: flex; gap: 20px; align-items: center;"></div></div></header><div class="filter-bar"><span class="filter-label">Week</span><div class="week-selector-wrap" style="display:flex; gap:8px; margin-right: 10px;"><select id="weekSelect" onchange="changeWeek(this.value)"
 style="padding: 4px 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-family: var(--mono); font-size: 12px; cursor: pointer;"><option>Loading...</option></select><select id="revSelect" onchange="changeRev(this.value)"
-style="display:none; padding: 4px 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface2); color: var(--accent); font-family: var(--mono); font-size: 12px; cursor: pointer; font-weight: 600;"></select></div><span class="filter-label">Day</span><div class="filter-group" id="dayFilters"></div><div class="divider"></div><span class="filter-label">Group</span><div class="filter-group" id="groupFilters"></div><div class="divider"></div><span class="filter-label">Area</span><div class="filter-group" id="areaFilters"></div><div class="divider"></div><span class="filter-label">Status</span><div class="filter-group" id="statusFilters"></div><div style="margin-left:auto; display:flex; gap:10px; align-items:center;"><div class="view-toggle"><button class="view-btn" id="btnWeek" onclick="setView('week')">WEEK</button><button class="view-btn active" id="btnList" onclick="setView('list')">LIST</button></div><div class="search-wrap"><input type="text" id="searchInput" placeholder="ค้นหางาน, อุปกรณ์..." oninput="render()"></div></div></div><main><div id="loading">กำลังซิงค์ข้อมูลจากฐานข้อมูล...</div><div class="week-grid hidden" id="weekView"></div><div class="list-view" id="listView"><table class="list-table"><thead><tr><th>Day / Date</th><th>Type / MOC</th><th>Equipment</th><th>Work Description</th><th>Group</th><th>Work Type</th><th>SWP</th><th>Area</th><th>Resp.</th></tr></thead><tbody id="listBody"></tbody></table></div></main><div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)"><div class="modal" id="modal"><div class="modal-header"><div><div class="modal-title" id="modalTitle"></div></div><button class="modal-close" onclick="closeModalDirect()">✕</button></div><div class="modal-grid" id="modalGrid"></div></div></div><script> // --- Realtime Clock ---
+style="display:none; padding: 4px 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface2); color: var(--accent); font-family: var(--mono); font-size: 12px; cursor: pointer; font-weight: 600;"></select></div><span class="filter-label">Day</span><div class="filter-group" id="dayFilters"></div><div class="divider"></div><span class="filter-label">Group</span><div class="filter-group" id="groupFilters"></div><div class="divider"></div><span class="filter-label">Area</span><div class="filter-group" id="areaFilters"></div><div class="divider"></div><span class="filter-label">Status</span><div class="filter-group" id="statusFilters"></div><div style="margin-left:auto; display:flex; gap:10px; align-items:center;"><div class="view-toggle"><button class="view-btn" id="btnWeek" onclick="setView('week')">WEEK</button><button class="view-btn active" id="btnList" onclick="setView('list')">LIST</button></div><div class="search-wrap"><input type="text" id="searchInput" placeholder="ค้นหางาน, อุปกรณ์..." oninput="render()"></div></div></div><main><div id="loading">กำลังซิงค์ข้อมูลจากฐานข้อมูล...</div><div class="week-view-shell" id="weekViewShell"><div class="week-scroll-top" id="weekScrollTop"><div class="week-scroll-top-inner" id="weekScrollTopInner"></div></div><div class="week-grid-wrap" id="weekGridWrap"><div class="week-grid hidden" id="weekView"></div></div></div><div class="list-view" id="listView"><table class="list-table"><thead><tr><th>Day / Date</th><th>Type / MOC</th><th>Equipment</th><th>Work Description</th><th>Group</th><th>Work Type</th><th>SWP</th><th>Area</th><th>Resp.</th></tr></thead><tbody id="listBody"></tbody></table></div></main><div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)"><div class="modal" id="modal"><div class="modal-header"><div><div class="modal-title" id="modalTitle"></div></div><button class="modal-close" onclick="closeModalDirect()">✕</button></div><div class="modal-grid" id="modalGrid"></div></div></div><script> // --- Realtime Clock ---
 
 function updateClock() {
     const now=new Date();
@@ -1635,6 +1667,7 @@ let prefetchQueue=[];
 let isPrefetching=false;
 const AREA_PRIORITY=["CP","ISBL"];
 const AREA_HIDDEN=new Set(["SSP/UT"]);
+let isWeekScrollSyncing=false;
 
 const API_URL="https://script.google.com/macros/s/AKfycbxeSFFtpkmF_G46wUz35dFgx-Oz7IAS556fzrciqacnCAeloLOynZrlNAFL3aiiLxqg/exec";
 
@@ -1695,6 +1728,7 @@ function buildDispatchChrome() {
 
 window.onload=()=> {
     buildDispatchChrome();
+    setupWeekScrollSync();
     loadInitialData();
 }
 
@@ -2201,12 +2235,63 @@ function updateFilters() {
 
 function setView(v) {
     viewMode=v;
+    const weekShell=document.getElementById('weekViewShell');
     document.getElementById('weekView').classList.toggle('hidden', v !=='week');
     document.getElementById('listView').classList.toggle('visible', v==='list');
+    if (weekShell) {
+        weekShell.classList.toggle('hidden', v !=='week');
+    }
     document.getElementById('btnWeek').classList.toggle('active', v==='week');
     document.getElementById('btnList').classList.toggle('active', v==='list');
     setSidebarActive(v==='week' ? 'week' : 'list');
+    if (v==='week') {
+        syncWeekScrollWidth();
+    }
     render();
+}
+
+function setupWeekScrollSync() {
+    const top=document.getElementById('weekScrollTop');
+    const wrap=document.getElementById('weekGridWrap');
+
+    if (!top || !wrap || top.dataset.bound==='1') {
+        return;
+    }
+
+    top.dataset.bound='1';
+
+    top.addEventListener('scroll', ()=> {
+            if (isWeekScrollSyncing) return;
+            isWeekScrollSyncing=true;
+            wrap.scrollLeft=top.scrollLeft;
+            isWeekScrollSyncing=false;
+        }, { passive: true });
+
+    wrap.addEventListener('scroll', ()=> {
+            if (isWeekScrollSyncing) return;
+            isWeekScrollSyncing=true;
+            top.scrollLeft=wrap.scrollLeft;
+            isWeekScrollSyncing=false;
+        }, { passive: true });
+
+    window.addEventListener('resize', syncWeekScrollWidth);
+    syncWeekScrollWidth();
+}
+
+function syncWeekScrollWidth() {
+    const top=document.getElementById('weekScrollTop');
+    const topInner=document.getElementById('weekScrollTopInner');
+    const wrap=document.getElementById('weekGridWrap');
+    const grid=document.getElementById('weekView');
+
+    if (!top || !topInner || !wrap || !grid) {
+        return;
+    }
+
+    const contentWidth=Math.max(grid.scrollWidth, wrap.clientWidth);
+    topInner.style.width=contentWidth + 'px';
+    top.style.display=contentWidth > wrap.clientWidth + 2 ? 'block' : 'none';
+    top.scrollLeft=wrap.scrollLeft;
 }
 
 function getFiltered() {
@@ -2291,6 +2376,8 @@ function renderWeek(data) {
 
             weekView.appendChild(col);
         });
+
+    syncWeekScrollWidth();
 }
 
 function makeCard(t) {
