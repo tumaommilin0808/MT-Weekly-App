@@ -1440,8 +1440,8 @@ input:focus-visible {
 }
 
 .dispatch-frame .week-grid {
-    grid-template-columns: repeat(7, minmax(240px, 1fr));
-    gap: 11px;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
     align-items: start;
 }
 
@@ -1452,7 +1452,7 @@ input:focus-visible {
 }
 
 .dispatch-frame .day-header {
-    padding: 9px 10px;
+    padding: 10px 11px;
 }
 
 .dispatch-frame .day-name {
@@ -1461,8 +1461,8 @@ input:focus-visible {
 }
 
 .dispatch-frame .day-tasks {
-    gap: 10px;
-    padding: 10px;
+    gap: 11px;
+    padding: 11px;
 }
 
 .dispatch-frame .task-card {
@@ -1470,15 +1470,16 @@ input:focus-visible {
 }
 
 .dispatch-frame .task-card-inner {
-    padding: 10px 11px 11px;
+    padding: 12px 12px 13px;
 }
 
 .dispatch-frame .task-equip {
-    font-size: 13px;
+    font-size: 14px;
 }
 
 .dispatch-frame .task-desc {
-    font-size: 12px;
+    font-size: 13px;
+    line-height: 1.45;
 }
 
 .dispatch-frame .task-resp {
@@ -1503,7 +1504,13 @@ body:not(.theme-light) .dispatch-nav-btn {
     }
 
     .dispatch-frame .week-grid {
-        grid-template-columns: repeat(7, minmax(220px, 1fr));
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 980px) {
+    .dispatch-frame .week-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
@@ -1626,7 +1633,8 @@ let weekDataCache={};
 let allWeeksCache=[];
 let prefetchQueue=[];
 let isPrefetching=false;
-const AREA_PRIORITY=["CP","SSP/UT","ISBL"];
+const AREA_PRIORITY=["CP","ISBL"];
+const AREA_HIDDEN=new Set(["SSP/UT"]);
 
 const API_URL="https://script.google.com/macros/s/AKfycbxeSFFtpkmF_G46wUz35dFgx-Oz7IAS556fzrciqacnCAeloLOynZrlNAFL3aiiLxqg/exec";
 
@@ -1702,6 +1710,7 @@ function renderOptionList(values) {
 
 function normalizeArea(value) {
     return (value || '-').toString()
+        .replace(/\s*&\s*/g, '/')
         .replace(/\s*\/\s*/g, '/')
         .replace(/\s+/g, ' ')
         .trim()
@@ -2106,7 +2115,9 @@ function renderAfterDataChange() {
     const rawDays=[...new Set(allData.map(r=> (r.day||'').toUpperCase().substring(0, 3)))].filter(Boolean);
     availableDays=DAYS_ORDER.filter(d=> rawDays.includes(d));
     availableGroups=[...new Set(allData.map(r=> r.group))].filter(Boolean).sort();
-    availableAreas=sortAreas([...new Set(allData.map(r=> normalizeArea(r.area)))].filter(Boolean));
+    availableAreas=sortAreas([...new Set(allData.map(r=> normalizeArea(r.area)))]
+        .filter(Boolean)
+        .filter(area=> !AREA_HIDDEN.has(area)));
 
     const todayStr=new Date().toLocaleDateString('en-US', {
         weekday: 'short'
@@ -2216,7 +2227,8 @@ function getFiltered() {
             ].join(' ').toLowerCase();
 
             const areaValue=normalizeArea(r.area);
-            return activeDays.has(d) && activeGroups.has(r.group) && activeAreas.has(areaValue) && activeStatuses.has(r.status) && (!q || searchable.includes(q));
+            const areaPass=AREA_HIDDEN.has(areaValue) ? true : activeAreas.has(areaValue);
+            return activeDays.has(d) && activeGroups.has(r.group) && areaPass && activeStatuses.has(r.status) && (!q || searchable.includes(q));
         });
 }
 
