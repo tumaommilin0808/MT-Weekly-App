@@ -1244,6 +1244,7 @@ let activeStatuses=new Set(STATUSES);
 let viewMode='list';
 let currentWeek='';
 let isWeekLoading=false;
+let pendingWeek='';
 
 const API_URL="https://script.google.com/macros/s/AKfycbxeSFFtpkmF_G46wUz35dFgx-Oz7IAS556fzrciqacnCAeloLOynZrlNAFL3aiiLxqg/exec";
 
@@ -1308,14 +1309,39 @@ function loadInitialData() {
     fetchWeeklyData('');
 }
 
+function renderOptionList(values) {
+    return values.map(v=> `<option value="${v}">${v}</option>`).join('');
+}
+
+function finishWeekLoading() {
+    const weekSelect=document.getElementById('weekSelect');
+
+    if (weekSelect) {
+        weekSelect.disabled=false;
+    }
+
+    if (pendingWeek && pendingWeek!==currentWeek) {
+        const nextWeek=pendingWeek;
+        pendingWeek='';
+        fetchWeeklyData(nextWeek);
+        return;
+    }
+
+    pendingWeek='';
+}
+
 function fetchWeeklyData(selectedWeek) {
     const loadingEl=document.getElementById('loading');
+    const weekSelect=document.getElementById('weekSelect');
     const requestedWeek=selectedWeek || '';
     const requestUrl=requestedWeek
         ? API_URL + '?action=compareRevisions&week=' + encodeURIComponent(requestedWeek)
         : API_URL + '?action=compareRevisions';
 
     isWeekLoading=true;
+    if (weekSelect) {
+        weekSelect.disabled=true;
+    }
     loadingEl.style.display='block';
     loadingEl.innerText=requestedWeek
         ? 'กำลังโหลดข้อมูลของ ' + requestedWeek + '...'
@@ -1326,10 +1352,12 @@ function fetchWeeklyData(selectedWeek) {
             .withSuccessHandler(result=> {
                 isWeekLoading=false;
                 initApp(result);
+                finishWeekLoading();
             })
             .withFailureHandler(err=> {
                 isWeekLoading=false;
                 loadingEl.innerText="โหลดข้อมูลไม่สำเร็จ: " + (err && err.message ? err.message : "Unknown error");
+                finishWeekLoading();
             })
             .compareRevisions(requestedWeek);
         return;
@@ -1345,10 +1373,12 @@ function fetchWeeklyData(selectedWeek) {
         .then(result=> {
             isWeekLoading=false;
             initApp(result);
+            finishWeekLoading();
         })
         .catch(err=> {
             isWeekLoading=false;
             loadingEl.innerText="Sync ไม่สำเร็จ: " + (err && err.message ? err.message : "Unknown error");
+            finishWeekLoading();
         });
 }
 
@@ -1365,11 +1395,7 @@ function initApp(result) {
     const select=document.getElementById('weekSelect');
 
     if (select) {
-        select.innerHTML=weeks.map(w=> `<option value="${w}" >${
-                w
-            }
-
-            </option>`).join('');
+        select.innerHTML=renderOptionList(weeks);
 
         if (currentWeek) {
             select.value=currentWeek;
@@ -1386,7 +1412,12 @@ function initApp(result) {
 
 // ๐ 1. เน€เธกเธทเนเธญเน€เธฅเธทเธญเธเธชเธฑเธเธ”เธฒเธซเน (เธเธฐเธซเธฒเธงเนเธฒเธชเธฑเธเธ”เธฒเธซเนเธเธตเนเธกเธตเธเธตเน Rev เนเธฅเนเธงเน€เธญเธฒเธกเธฒเนเธเธงเน)
 function changeWeek(selectedWeek) {
-    if (isWeekLoading || !selectedWeek) {
+    if (!selectedWeek) {
+        return;
+    }
+
+    if (isWeekLoading) {
+        pendingWeek=selectedWeek;
         return;
     }
 
@@ -1408,11 +1439,7 @@ function applyCurrentWeekData() {
     if (revs.length > 0) {
 
         // เธเธณเธฃเธฒเธขเธเธทเนเธญ Rev เธกเธฒเนเธชเนเนเธ Dropdown เธ—เธตเน 2
-        revSelect.innerHTML=revs.map(r=> `<option value="${r}" >${
-                r
-            }
-
-            </option>`).join('');
+        revSelect.innerHTML=renderOptionList(revs);
         revSelect.style.display='block'; // เนเธเธงเน Dropdown เธเธญเธ Rev เธ—เธฑเธเธ—เธต
 
         // เธเธฑเธเธเธฑเธเน€เธฅเธทเธญเธ Rev เธฅเนเธฒเธชเธธเธ”เน€เธเนเธเธเนเธฒเน€เธฃเธดเนเธกเธ•เนเธ
