@@ -1245,6 +1245,8 @@ let viewMode='list';
 let currentWeek='';
 let isWeekLoading=false;
 let pendingWeek='';
+let weekDataCache={};
+let allWeeksCache=[];
 
 const API_URL="https://script.google.com/macros/s/AKfycbxeSFFtpkmF_G46wUz35dFgx-Oz7IAS556fzrciqacnCAeloLOynZrlNAFL3aiiLxqg/exec";
 
@@ -1313,6 +1315,37 @@ function renderOptionList(values) {
     return values.map(v=> `<option value="${v}">${v}</option>`).join('');
 }
 
+function cloneTasks(tasks) {
+    return (tasks||[]).map(t=> Object.assign({}, t));
+}
+
+function setWeekCache(week, tasks) {
+    if (!week) return;
+    weekDataCache[week]=cloneTasks(tasks);
+}
+
+function getWeekCache(week) {
+    if (!week || !weekDataCache[week]) return null;
+    return cloneTasks(weekDataCache[week]);
+}
+
+function useWeekFromCache(selectedWeek) {
+    const cachedTasks=getWeekCache(selectedWeek);
+    if (!cachedTasks) return false;
+
+    currentWeek=selectedWeek;
+    fullDataStore=cachedTasks;
+
+    const weekSelect=document.getElementById('weekSelect');
+    if (weekSelect) {
+        weekSelect.value=selectedWeek;
+    }
+
+    document.getElementById('loading').style.display='none';
+    applyCurrentWeekData();
+    return true;
+}
+
 function finishWeekLoading() {
     const weekSelect=document.getElementById('weekSelect');
 
@@ -1323,6 +1356,9 @@ function finishWeekLoading() {
     if (pendingWeek && pendingWeek!==currentWeek) {
         const nextWeek=pendingWeek;
         pendingWeek='';
+        if (useWeekFromCache(nextWeek)) {
+            return;
+        }
         fetchWeeklyData(nextWeek);
         return;
     }
@@ -1390,20 +1426,28 @@ function initApp(result, fallbackWeek) {
 
     fullDataStore=result.allTasks;
     const weeks=result.allWeeks || [];
+    if (weeks.length > 0) {
+        allWeeksCache=weeks.slice();
+    }
     currentWeek=result.selectedWeek || fallbackWeek || '';
     if (!currentWeek && weeks.length > 0) {
         currentWeek=weeks[0];
     }
+    if (currentWeek) {
+        fullDataStore=fullDataStore.filter(t=> t.week===currentWeek);
+    }
+    setWeekCache(currentWeek, fullDataStore);
 
     const select=document.getElementById('weekSelect');
 
     if (select) {
-        select.innerHTML=renderOptionList(weeks);
+        const weekOptions=allWeeksCache.length > 0 ? allWeeksCache : weeks;
+        select.innerHTML=renderOptionList(weekOptions);
 
         if (currentWeek) {
             select.value=currentWeek;
-        } else if (weeks.length > 0) {
-            select.value=weeks[0];
+        } else if (weekOptions.length > 0) {
+            select.value=weekOptions[0];
         }
     }
 
@@ -1428,6 +1472,10 @@ function changeWeek(selectedWeek) {
 
     if (selectedWeek===currentWeek) {
         applyCurrentWeekData();
+        return;
+    }
+
+    if (useWeekFromCache(selectedWeek)) {
         return;
     }
 
