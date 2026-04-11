@@ -896,7 +896,254 @@ main {
     .modal-grid {
         grid-template-columns: 1fr;
     }
-}</style></head><body class="theme-light"><header><div class="logo"><div class="logo-icon">MT</div><div><div class="logo-text">WEEKLY SCHEDULING</div><div class="logo-sub" id="logoSub">Loading DB...</div></div></div><div class="header-right"><button class="theme-toggle" onclick="toggleTheme()"><span id="themeIcon">🌙 โหมดมืด</span></button><div class="realtime-clock"><div id="clockTime" style="font-size: 16px;">00:00:00</div><div id="clockDate" style="font-size: 11px; font-weight: 400; color: var(--muted); margin-top: 2px;">DD MMM YYYY</div></div><div class="header-stats" id="headerStats" style="display: flex; gap: 20px; align-items: center;"></div></div></header><div class="filter-bar"><span class="filter-label">Week</span><div class="week-selector-wrap" style="display:flex; gap:8px; margin-right: 10px;"><select id="weekSelect" onchange="changeWeek(this.value)"
+}
+
+/* === Dispatch Board Adapt Layer === */
+body {
+    background:
+        radial-gradient(900px 500px at 12% 8%, rgba(56, 189, 248, 0.22), transparent 58%),
+        radial-gradient(860px 500px at 92% 5%, rgba(244, 114, 182, 0.18), transparent 55%),
+        #d7e4ea;
+    padding: 20px;
+}
+
+.dispatch-shell {
+    max-width: 1560px;
+    margin: 0 auto;
+    display: flex;
+    gap: 14px;
+    align-items: stretch;
+    min-height: calc(100vh - 40px);
+}
+
+.dispatch-sidebar {
+    width: 64px;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #091225 0%, #0c1b2e 100%);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 8px;
+    gap: 10px;
+    box-shadow: 0 14px 34px rgba(9, 18, 37, 0.28);
+}
+
+.dispatch-brand {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: linear-gradient(140deg, #1d4ed8, #0ea5e9);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.dispatch-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    align-items: center;
+}
+
+.dispatch-nav-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 1px solid rgba(148, 163, 184, 0.24);
+    background: transparent;
+    color: #cbd5e1;
+    font-family: var(--mono);
+    font-size: 11px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.dispatch-nav-btn:hover,
+.dispatch-nav-btn.active {
+    background: #1677ff;
+    color: #fff;
+    border-color: transparent;
+}
+
+.dispatch-board {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.dispatch-board-top {
+    height: 44px;
+    border-radius: 12px 12px 0 0;
+    background: rgba(255, 255, 255, 0.86);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    border-bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+}
+
+.dispatch-board-title {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: #0f172a;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+.dispatch-board-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #64748b;
+}
+
+.dispatch-frame {
+    flex: 1;
+    min-height: 0;
+    border: 1px solid rgba(148, 163, 184, 0.36);
+    border-radius: 0 0 12px 12px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.88);
+    box-shadow: 0 18px 44px rgba(15, 23, 42, 0.16);
+    display: flex;
+    flex-direction: column;
+}
+
+.dispatch-frame header,
+.dispatch-frame .filter-bar {
+    position: static;
+    top: auto;
+}
+
+.dispatch-frame header {
+    height: 58px;
+    padding: 0 16px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: none;
+}
+
+.dispatch-frame .filter-bar {
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    background: rgba(248, 250, 252, 0.9);
+}
+
+.dispatch-frame main {
+    margin: 0;
+    max-width: none;
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    background: rgba(241, 245, 249, 0.82);
+    padding: 14px 16px 24px;
+}
+
+body.theme-light .dispatch-frame {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+body:not(.theme-light) .dispatch-board-top {
+    background: rgba(15, 23, 42, 0.84);
+    border-color: rgba(71, 85, 105, 0.65);
+}
+
+body:not(.theme-light) .dispatch-board-title {
+    color: #e2e8f0;
+}
+
+body:not(.theme-light) .dispatch-board-meta {
+    color: #94a3b8;
+}
+
+body:not(.theme-light) .dispatch-frame {
+    border-color: rgba(71, 85, 105, 0.5);
+    background: rgba(15, 23, 42, 0.9);
+}
+
+body:not(.theme-light) .dispatch-frame header {
+    background: rgba(15, 23, 42, 0.88);
+    border-bottom-color: rgba(71, 85, 105, 0.5);
+}
+
+body:not(.theme-light) .dispatch-frame .filter-bar {
+    background: rgba(15, 23, 42, 0.8);
+    border-bottom-color: rgba(71, 85, 105, 0.4);
+}
+
+body:not(.theme-light) .dispatch-frame main {
+    background: rgba(2, 6, 23, 0.5);
+}
+
+@media (max-width: 1024px) {
+    body {
+        padding: 10px;
+    }
+
+    .dispatch-shell {
+        min-height: calc(100vh - 20px);
+        gap: 10px;
+    }
+
+    .dispatch-sidebar {
+        width: 54px;
+        padding: 8px 6px;
+    }
+
+    .dispatch-nav-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 0;
+        background: var(--bg);
+    }
+
+    .dispatch-shell {
+        display: block;
+        min-height: 100vh;
+    }
+
+    .dispatch-sidebar,
+    .dispatch-board-top {
+        display: none;
+    }
+
+    .dispatch-frame {
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        min-height: 100vh;
+    }
+
+    .dispatch-frame header {
+        height: auto;
+        padding: 10px 14px;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .dispatch-frame .filter-bar {
+        padding: 10px 14px;
+    }
+
+    .dispatch-frame main {
+        padding: 16px 14px 26px;
+    }
+}
+</style></head><body class="theme-light"><header><div class="logo"><div class="logo-icon">MT</div><div><div class="logo-text">WEEKLY SCHEDULING</div><div class="logo-sub" id="logoSub">Loading DB...</div></div></div><div class="header-right"><button class="theme-toggle" onclick="toggleTheme()"><span id="themeIcon">🌙 โหมดมืด</span></button><div class="realtime-clock"><div id="clockTime" style="font-size: 16px;">00:00:00</div><div id="clockDate" style="font-size: 11px; font-weight: 400; color: var(--muted); margin-top: 2px;">DD MMM YYYY</div></div><div class="header-stats" id="headerStats" style="display: flex; gap: 20px; align-items: center;"></div></div></header><div class="filter-bar"><span class="filter-label">Week</span><div class="week-selector-wrap" style="display:flex; gap:8px; margin-right: 10px;"><select id="weekSelect" onchange="changeWeek(this.value)"
 style="padding: 4px 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-family: var(--mono); font-size: 12px; cursor: pointer;"><option>Loading...</option></select><select id="revSelect" onchange="changeRev(this.value)"
 style="display:none; padding: 4px 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface2); color: var(--accent); font-family: var(--mono); font-size: 12px; cursor: pointer; font-weight: 600;"></select></div><span class="filter-label">Day</span><div class="filter-group" id="dayFilters"></div><div class="divider"></div><span class="filter-label">Group</span><div class="filter-group" id="groupFilters"></div><div class="divider"></div><span class="filter-label">Status</span><div class="filter-group" id="statusFilters"></div><div style="margin-left:auto; display:flex; gap:10px; align-items:center;"><div class="view-toggle"><button class="view-btn" id="btnWeek" onclick="setView('week')">WEEK</button><button class="view-btn active" id="btnList" onclick="setView('list')">LIST</button></div><div class="search-wrap"><input type="text" id="searchInput" placeholder="ค้นหางาน, อุปกรณ์..." oninput="render()"></div></div></div><main><div id="loading">กำลังซิงค์ข้อมูลจากฐานข้อมูล...</div><div class="week-grid hidden" id="weekView"></div><div class="list-view" id="listView"><table class="list-table"><thead><tr><th>Day / Date</th><th>Type / MOC</th><th>Equipment</th><th>Work Description</th><th>Group</th><th>Work Type</th><th>SWP</th><th>Area</th><th>Resp.</th></tr></thead><tbody id="listBody"></tbody></table></div></main><div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)"><div class="modal" id="modal"><div class="modal-header"><div><div class="modal-title" id="modalTitle"></div></div><button class="modal-close" onclick="closeModalDirect()">✕</button></div><div class="modal-grid" id="modalGrid"></div></div></div><script> // --- Realtime Clock ---
 
@@ -995,47 +1242,125 @@ let activeDays=new Set();
 let activeGroups=new Set();
 let activeStatuses=new Set(STATUSES);
 let viewMode='list';
+let currentWeek='';
+let isWeekLoading=false;
 
 const API_URL="https://script.google.com/macros/s/AKfycbxeSFFtpkmF_G46wUz35dFgx-Oz7IAS556fzrciqacnCAeloLOynZrlNAFL3aiiLxqg/exec";
 
+function buildDispatchChrome() {
+    if (document.getElementById('dispatchShell')) {
+        return;
+    }
+
+    const header=document.querySelector('body > header');
+    const filterBar=document.querySelector('body > .filter-bar');
+    const main=document.querySelector('body > main');
+
+    if (!header || !filterBar || !main) {
+        return;
+    }
+
+    const shell=document.createElement('div');
+    shell.id='dispatchShell';
+    shell.className='dispatch-shell';
+
+    const sidebar=document.createElement('aside');
+    sidebar.className='dispatch-sidebar';
+    sidebar.innerHTML=`<div class="dispatch-brand">MT</div>
+        <div class="dispatch-nav">
+            <button class="dispatch-nav-btn active" type="button">DB</button>
+            <button class="dispatch-nav-btn" type="button">WK</button>
+            <button class="dispatch-nav-btn" type="button">TS</button>
+            <button class="dispatch-nav-btn" type="button">RP</button>
+            <button class="dispatch-nav-btn" type="button">PT</button>
+            <button class="dispatch-nav-btn" type="button">LK</button>
+            <button class="dispatch-nav-btn" type="button">SG</button>
+            <button class="dispatch-nav-btn" type="button">CF</button>
+        </div>`;
+
+    const board=document.createElement('div');
+    board.className='dispatch-board';
+    board.innerHTML=`<div class="dispatch-board-top">
+            <div class="dispatch-board-title">Dispatch Board</div>
+            <div class="dispatch-board-meta">MT Weekly Operations</div>
+        </div>
+        <div class="dispatch-frame"></div>`;
+
+    shell.appendChild(sidebar);
+    shell.appendChild(board);
+
+    header.parentNode.insertBefore(shell, header);
+
+    const frame=board.querySelector('.dispatch-frame');
+    frame.appendChild(header);
+    frame.appendChild(filterBar);
+    frame.appendChild(main);
+}
+
 window.onload=()=> {
+    buildDispatchChrome();
     loadInitialData();
 }
 
 ;
 
 function loadInitialData() {
+    fetchWeeklyData('');
+}
+
+function fetchWeeklyData(selectedWeek) {
     const loadingEl=document.getElementById('loading');
+    const requestedWeek=selectedWeek || '';
+    const requestUrl=requestedWeek
+        ? API_URL + '?action=compareRevisions&week=' + encodeURIComponent(requestedWeek)
+        : API_URL + '?action=compareRevisions';
+
+    isWeekLoading=true;
+    loadingEl.style.display='block';
+    loadingEl.innerText=requestedWeek
+        ? 'กำลังโหลดข้อมูลของ ' + requestedWeek + '...'
+        : 'กำลังซิงค์ข้อมูลจากฐานข้อมูล...';
 
     if (typeof google !=='undefined' && google.script && google.script.run) {
         google.script.run
-            .withSuccessHandler(initApp)
+            .withSuccessHandler(result=> {
+                isWeekLoading=false;
+                initApp(result);
+            })
             .withFailureHandler(err=> {
+                isWeekLoading=false;
                 loadingEl.innerText="โหลดข้อมูลไม่สำเร็จ: " + (err && err.message ? err.message : "Unknown error");
             })
-            .compareRevisions();
+            .compareRevisions(requestedWeek);
         return;
     }
 
-    fetch(API_URL + '?action=compareRevisions', {
+    fetch(requestUrl, {
         method: 'GET'
     })
         .then(res=> {
             if (!res.ok) throw new Error('HTTP ' + res.status);
             return res.json();
         })
-        .then(initApp)
+        .then(result=> {
+            isWeekLoading=false;
+            initApp(result);
+        })
         .catch(err=> {
+            isWeekLoading=false;
             loadingEl.innerText="Sync ไม่สำเร็จ: " + (err && err.message ? err.message : "Unknown error");
         });
-}function initApp(result) {
-    if ( !result || !result.allTasks) {
+}
+
+function initApp(result) {
+    if ( !result || !Array.isArray(result.allTasks)) {
         document.getElementById('loading').innerText="เกิดข้อผิดพลาดในการโหลดข้อมูล";
         return;
     }
 
     fullDataStore=result.allTasks;
     const weeks=result.allWeeks || [];
+    currentWeek=result.selectedWeek || '';
 
     const select=document.getElementById('weekSelect');
 
@@ -1045,19 +1370,36 @@ function loadInitialData() {
             }
 
             </option>`).join('');
+
+        if (currentWeek) {
+            select.value=currentWeek;
+        }
     }
 
     document.getElementById('loading').style.display='none';
-    if(fullDataStore.length > 0) document.getElementById('logoSub').innerText="ซิงค์ข้อมูลล่าสุดสำเร็จแล้ว";
+    document.getElementById('logoSub').innerText=fullDataStore.length > 0
+        ? "ซิงค์ข้อมูลล่าสุดสำเร็จแล้ว"
+        : "ไม่พบข้อมูลงานในสัปดาห์นี้";
 
-    if (weeks.length > 0) {
-        changeWeek(weeks[0]);
-    }
+    applyCurrentWeekData();
 }
 
 // ๐ 1. เน€เธกเธทเนเธญเน€เธฅเธทเธญเธเธชเธฑเธเธ”เธฒเธซเน (เธเธฐเธซเธฒเธงเนเธฒเธชเธฑเธเธ”เธฒเธซเนเธเธตเนเธกเธตเธเธตเน Rev เนเธฅเนเธงเน€เธญเธฒเธกเธฒเนเธเธงเน)
 function changeWeek(selectedWeek) {
-    const weekTasks=fullDataStore.filter(t=> t.week===selectedWeek);
+    if (isWeekLoading || !selectedWeek) {
+        return;
+    }
+
+    if (selectedWeek===currentWeek) {
+        applyCurrentWeekData();
+        return;
+    }
+
+    fetchWeeklyData(selectedWeek);
+}
+
+function applyCurrentWeekData() {
+    const weekTasks=fullDataStore;
 
     // เธซเธฒ Rev เธ—เธฑเนเธเธซเธกเธ”เธ—เธตเนเธกเธตเนเธเธชเธฑเธเธ”เธฒเธซเนเธเธตเน เนเธฅเนเธงเน€เธฃเธตเธขเธเธฅเธณเธ”เธฑเธ
     const revs=[...new Set(weekTasks.map(t=> t.rev))].filter(Boolean).sort();
@@ -1084,6 +1426,7 @@ function changeWeek(selectedWeek) {
     else {
         // เธ–เนเธฒเธชเธฑเธเธ”เธฒเธซเนเธเธฑเนเธเนเธกเนเธกเธตเธเนเธญเธกเธนเธฅเน€เธฅเธข เธเนเธเนเธญเธ Dropdown เธเธญเธ Rev เนเธ
         revSelect.style.display='none';
+        revSelect.innerHTML='';
         allData=[];
         renderAfterDataChange();
     }
@@ -1091,8 +1434,7 @@ function changeWeek(selectedWeek) {
 
 // ๐ 2. เน€เธกเธทเนเธญเน€เธฅเธทเธญเธ Rev เธขเนเธญเธข (เธฃเธฐเธเธเธเธฐเธ”เธถเธ Rev เธเนเธญเธเธซเธเนเธฒเธกเธฒเน€เธเธฃเธตเธขเธเน€เธ—เธตเธขเธเธซเธฒ NEW/CANCEL)
 function changeRev(selectedRev) {
-    const selectedWeek=document.getElementById('weekSelect').value;
-    const weekTasks=fullDataStore.filter(t=> t.week===selectedWeek);
+    const weekTasks=fullDataStore;
     const revs=[...new Set(weekTasks.map(t=> t.rev))].filter(Boolean).sort();
 
     // เธซเธฒเธงเนเธฒ Rev เธ—เธตเนเน€เธฃเธฒเน€เธฅเธทเธญเธเธญเธขเธนเนเธฅเธณเธ”เธฑเธเธ—เธตเนเน€เธ—เนเธฒเนเธซเธฃเน เธเธฐเนเธ”เนเนเธเธซเธฒ Rev เธ•เธฑเธงเธเนเธญเธเธซเธเนเธฒเธกเธฒเน€เธ—เธตเธขเธเธ–เธนเธ
