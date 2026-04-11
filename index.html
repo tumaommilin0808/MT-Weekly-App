@@ -971,6 +971,17 @@ body {
     border-color: transparent;
 }
 
+.dispatch-nav-btn[data-action="refresh"] {
+    margin-top: 8px;
+    border-color: rgba(14, 165, 233, 0.35);
+    color: #7dd3fc;
+}
+
+.dispatch-nav-btn[data-action="reset"] {
+    border-color: rgba(248, 113, 113, 0.35);
+    color: #fda4af;
+}
+
 .dispatch-board {
     flex: 1;
     min-width: 0;
@@ -1047,6 +1058,153 @@ body {
     padding: 14px 16px 24px;
 }
 
+.dispatch-frame .week-grid {
+    grid-template-columns: repeat(7, minmax(180px, 1fr));
+    gap: 8px;
+}
+
+.dispatch-frame .day-col {
+    border-radius: 8px;
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    background: #f8fafc;
+}
+
+.dispatch-frame .day-header {
+    padding: 8px 10px;
+    background: #eef2f7;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.28);
+}
+
+.dispatch-frame .day-name {
+    font-size: 11px;
+    letter-spacing: 0.8px;
+    color: #475569;
+}
+
+.dispatch-frame .day-date {
+    font-size: 10px;
+}
+
+.dispatch-frame .day-count {
+    background: #e2e8f0;
+    color: #475569;
+}
+
+.dispatch-frame .day-tasks {
+    padding: 8px;
+    gap: 7px;
+    max-height: 560px;
+    overflow: auto;
+}
+
+.dispatch-frame .task-card {
+    border-left: 0;
+    border-radius: 7px;
+    border: 1px solid #dbe5f1;
+    background: #fff;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+.dispatch-frame .task-card:hover {
+    border-color: #93c5fd;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 16px rgba(15, 23, 42, 0.12);
+}
+
+.dispatch-frame .task-strip {
+    height: 3px;
+    background: var(--plan);
+}
+
+.dispatch-frame .task-card.status-new .task-strip {
+    background: var(--new);
+}
+
+.dispatch-frame .task-card.status-cancelled .task-strip {
+    background: var(--cancel);
+}
+
+.dispatch-frame .task-card-inner {
+    padding: 8px 9px 9px;
+}
+
+.dispatch-frame .task-meta-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    margin-bottom: 5px;
+}
+
+.dispatch-frame .task-ref {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: #334155;
+    font-weight: 700;
+}
+
+.dispatch-frame .task-equip {
+    font-size: 12px;
+    margin-bottom: 4px;
+    color: #0f172a;
+}
+
+.dispatch-frame .task-desc {
+    font-size: 11px;
+    line-height: 1.35;
+    -webkit-line-clamp: 2;
+    margin-bottom: 6px;
+    color: #475569;
+}
+
+.dispatch-frame .task-chip-row {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+}
+
+.dispatch-frame .task-chip {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 999px;
+    border: 1px solid #cbd5e1;
+    color: #475569;
+    background: #f8fafc;
+    letter-spacing: 0.2px;
+    text-transform: uppercase;
+}
+
+.dispatch-frame .task-chip.is-accent {
+    border-color: rgba(15, 118, 110, 0.25);
+    background: rgba(15, 118, 110, 0.1);
+    color: #0f766e;
+}
+
+.dispatch-frame .task-chip.is-warn {
+    border-color: rgba(217, 119, 6, 0.25);
+    background: rgba(245, 158, 11, 0.1);
+    color: #b45309;
+}
+
+.dispatch-frame .task-chip.is-danger {
+    border-color: rgba(220, 38, 38, 0.25);
+    background: rgba(239, 68, 68, 0.1);
+    color: #b91c1c;
+}
+
+.dispatch-frame .task-footer {
+    margin-top: 0;
+    padding-top: 6px;
+}
+
+.dispatch-frame .task-resp {
+    font-size: 10px;
+}
+
 body.theme-light .dispatch-frame {
     background: rgba(255, 255, 255, 0.9);
 }
@@ -1081,6 +1239,35 @@ body:not(.theme-light) .dispatch-frame .filter-bar {
 
 body:not(.theme-light) .dispatch-frame main {
     background: rgba(2, 6, 23, 0.5);
+}
+
+body:not(.theme-light) .dispatch-frame .day-col {
+    background: rgba(30, 41, 59, 0.7);
+    border-color: rgba(71, 85, 105, 0.5);
+}
+
+body:not(.theme-light) .dispatch-frame .day-header {
+    background: rgba(30, 41, 59, 0.9);
+    border-bottom-color: rgba(71, 85, 105, 0.45);
+}
+
+body:not(.theme-light) .dispatch-frame .day-name,
+body:not(.theme-light) .dispatch-frame .task-ref {
+    color: #cbd5e1;
+}
+
+body:not(.theme-light) .dispatch-frame .task-card {
+    background: rgba(15, 23, 42, 0.95);
+    border-color: rgba(71, 85, 105, 0.55);
+}
+
+body:not(.theme-light) .dispatch-frame .task-equip {
+    color: #f8fafc;
+}
+
+body:not(.theme-light) .dispatch-frame .task-desc,
+body:not(.theme-light) .dispatch-frame .task-resp {
+    color: #94a3b8;
 }
 
 @media (max-width: 1024px) {
@@ -1241,12 +1428,14 @@ const STATUSES=["NEW",
 let activeDays=new Set();
 let activeGroups=new Set();
 let activeStatuses=new Set(STATUSES);
-let viewMode='list';
+let viewMode='week';
 let currentWeek='';
 let isWeekLoading=false;
 let pendingWeek='';
 let weekDataCache={};
 let allWeeksCache=[];
+let prefetchQueue=[];
+let isPrefetching=false;
 
 const API_URL="https://script.google.com/macros/s/AKfycbxeSFFtpkmF_G46wUz35dFgx-Oz7IAS556fzrciqacnCAeloLOynZrlNAFL3aiiLxqg/exec";
 
@@ -1271,21 +1460,21 @@ function buildDispatchChrome() {
     sidebar.className='dispatch-sidebar';
     sidebar.innerHTML=`<div class="dispatch-brand">MT</div>
         <div class="dispatch-nav">
-            <button class="dispatch-nav-btn active" type="button">DB</button>
-            <button class="dispatch-nav-btn" type="button">WK</button>
-            <button class="dispatch-nav-btn" type="button">TS</button>
-            <button class="dispatch-nav-btn" type="button">RP</button>
-            <button class="dispatch-nav-btn" type="button">PT</button>
-            <button class="dispatch-nav-btn" type="button">LK</button>
-            <button class="dispatch-nav-btn" type="button">SG</button>
-            <button class="dispatch-nav-btn" type="button">CF</button>
+            <button class="dispatch-nav-btn active" data-action="week" type="button" title="Week Board">WK</button>
+            <button class="dispatch-nav-btn" data-action="list" type="button" title="List View">LS</button>
+            <button class="dispatch-nav-btn" data-action="today" type="button" title="Today Only">TD</button>
+            <button class="dispatch-nav-btn" data-action="new" type="button" title="New Tasks">NW</button>
+            <button class="dispatch-nav-btn" data-action="cancelled" type="button" title="Cancelled Tasks">CN</button>
+            <button class="dispatch-nav-btn" data-action="loto" type="button" title="LOTO / Simple Lock">LO</button>
+            <button class="dispatch-nav-btn" data-action="reset" type="button" title="Reset Filters">RS</button>
+            <button class="dispatch-nav-btn" data-action="refresh" type="button" title="Reload Week">RF</button>
         </div>`;
 
     const board=document.createElement('div');
     board.className='dispatch-board';
     board.innerHTML=`<div class="dispatch-board-top">
             <div class="dispatch-board-title">Dispatch Board</div>
-            <div class="dispatch-board-meta">MT Weekly Operations</div>
+            <div class="dispatch-board-meta" id="dispatchBoardMeta">MT Weekly Operations</div>
         </div>
         <div class="dispatch-frame"></div>`;
 
@@ -1298,6 +1487,10 @@ function buildDispatchChrome() {
     frame.appendChild(header);
     frame.appendChild(filterBar);
     frame.appendChild(main);
+
+    sidebar.querySelectorAll('.dispatch-nav-btn').forEach(btn=> {
+        btn.onclick=()=>handleSidebarAction(btn.dataset.action);
+    });
 }
 
 window.onload=()=> {
@@ -1342,6 +1535,7 @@ function useWeekFromCache(selectedWeek) {
     }
 
     document.getElementById('loading').style.display='none';
+    updateDispatchMeta();
     applyCurrentWeekData();
     return true;
 }
@@ -1366,13 +1560,169 @@ function finishWeekLoading() {
     pendingWeek='';
 }
 
+function updateDispatchMeta() {
+    const metaEl=document.getElementById('dispatchBoardMeta');
+    if (!metaEl) return;
+
+    const cachedCount=Object.keys(weekDataCache).length;
+    const totalWeeks=allWeeksCache.length;
+
+    if (currentWeek) {
+        metaEl.innerText=`${currentWeek} | Cache ${cachedCount}/${totalWeeks || cachedCount}`;
+        return;
+    }
+
+    metaEl.innerText='MT Weekly Operations';
+}
+
+function setSidebarActive(action) {
+    document.querySelectorAll('.dispatch-nav-btn').forEach(btn=> {
+        btn.classList.toggle('active', btn.dataset.action===action);
+    });
+}
+
+function resetFiltersToAll() {
+    activeDays=new Set(availableDays);
+    activeGroups=new Set(availableGroups);
+    activeStatuses=new Set(STATUSES);
+    document.getElementById('searchInput').value='';
+    updateFilters();
+    render();
+}
+
+function setStatusOnly(status) {
+    if (!status) return;
+    activeStatuses=new Set([status]);
+    updateFilters();
+    render();
+}
+
+function handleSidebarAction(action) {
+    if (!action) return;
+
+    if (action==='week') {
+        setSidebarActive(action);
+        setView('week');
+        return;
+    }
+
+    if (action==='list') {
+        setSidebarActive(action);
+        setView('list');
+        return;
+    }
+
+    if (action==='today') {
+        const todayStr=new Date().toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
+        if (availableDays.includes(todayStr)) {
+            activeDays=new Set([todayStr]);
+        } else if (availableDays.length > 0) {
+            activeDays=new Set([availableDays[0]]);
+        }
+        updateFilters();
+        render();
+        setSidebarActive(action);
+        return;
+    }
+
+    if (action==='new') {
+        setStatusOnly('NEW');
+        setSidebarActive(action);
+        return;
+    }
+
+    if (action==='cancelled') {
+        setStatusOnly('CANCELLED');
+        setSidebarActive(action);
+        return;
+    }
+
+    if (action==='loto') {
+        document.getElementById('searchInput').value='loto';
+        render();
+        setSidebarActive(action);
+        return;
+    }
+
+    if (action==='reset') {
+        resetFiltersToAll();
+        setSidebarActive('week');
+        return;
+    }
+
+    if (action==='refresh') {
+        const targetWeek=currentWeek || document.getElementById('weekSelect').value || '';
+        if (targetWeek) {
+            if (isWeekLoading) {
+                pendingWeek=targetWeek;
+                return;
+            }
+            delete weekDataCache[targetWeek];
+            fetchWeeklyData(targetWeek);
+        }
+    }
+}
+
+function requestWeekData(requestedWeek, onSuccess, onFailure) {
+    const requestUrl=requestedWeek
+        ? API_URL + '?action=compareRevisions&week=' + encodeURIComponent(requestedWeek)
+        : API_URL + '?action=compareRevisions';
+
+    if (typeof google !=='undefined' && google.script && google.script.run) {
+        google.script.run
+            .withSuccessHandler(onSuccess)
+            .withFailureHandler(onFailure)
+            .compareRevisions(requestedWeek);
+        return;
+    }
+
+    fetch(requestUrl, { method: 'GET' })
+        .then(res=> {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+        })
+        .then(onSuccess)
+        .catch(onFailure);
+}
+
+function startPrefetchAllWeeks() {
+    if (isPrefetching || allWeeksCache.length===0) return;
+
+    prefetchQueue=allWeeksCache.filter(w=> w && !weekDataCache[w] && w!==currentWeek);
+    if (prefetchQueue.length===0) {
+        updateDispatchMeta();
+        return;
+    }
+
+    isPrefetching=true;
+    prefetchNextWeek();
+}
+
+function prefetchNextWeek() {
+    if (prefetchQueue.length===0) {
+        isPrefetching=false;
+        updateDispatchMeta();
+        return;
+    }
+
+    const week=prefetchQueue.shift();
+    requestWeekData(week, result=> {
+        if (result && Array.isArray(result.allTasks)) {
+            const selected=result.selectedWeek || week;
+            const tasks=result.allTasks.filter(t=> t.week===selected);
+            setWeekCache(selected, tasks);
+        }
+        updateDispatchMeta();
+        setTimeout(prefetchNextWeek, 80);
+    }, ()=> {
+        setTimeout(prefetchNextWeek, 120);
+    });
+}
+
 function fetchWeeklyData(selectedWeek) {
     const loadingEl=document.getElementById('loading');
     const weekSelect=document.getElementById('weekSelect');
     const requestedWeek=selectedWeek || '';
-    const requestUrl=requestedWeek
-        ? API_URL + '?action=compareRevisions&week=' + encodeURIComponent(requestedWeek)
-        : API_URL + '?action=compareRevisions';
 
     isWeekLoading=true;
     if (weekSelect) {
@@ -1383,39 +1733,15 @@ function fetchWeeklyData(selectedWeek) {
         ? 'กำลังโหลดข้อมูลของ ' + requestedWeek + '...'
         : 'กำลังซิงค์ข้อมูลจากฐานข้อมูล...';
 
-    if (typeof google !=='undefined' && google.script && google.script.run) {
-        google.script.run
-            .withSuccessHandler(result=> {
-                isWeekLoading=false;
-                initApp(result, requestedWeek);
-                finishWeekLoading();
-            })
-            .withFailureHandler(err=> {
-                isWeekLoading=false;
-                loadingEl.innerText="โหลดข้อมูลไม่สำเร็จ: " + (err && err.message ? err.message : "Unknown error");
-                finishWeekLoading();
-            })
-            .compareRevisions(requestedWeek);
-        return;
-    }
-
-    fetch(requestUrl, {
-        method: 'GET'
-    })
-        .then(res=> {
-            if (!res.ok) throw new Error('HTTP ' + res.status);
-            return res.json();
-        })
-        .then(result=> {
-            isWeekLoading=false;
-            initApp(result, requestedWeek);
-            finishWeekLoading();
-        })
-        .catch(err=> {
-            isWeekLoading=false;
-            loadingEl.innerText="Sync ไม่สำเร็จ: " + (err && err.message ? err.message : "Unknown error");
-            finishWeekLoading();
-        });
+    requestWeekData(requestedWeek, result=> {
+        isWeekLoading=false;
+        initApp(result, requestedWeek);
+        finishWeekLoading();
+    }, err=> {
+        isWeekLoading=false;
+        loadingEl.innerText="Sync ไม่สำเร็จ: " + (err && err.message ? err.message : "Unknown error");
+        finishWeekLoading();
+    });
 }
 
 function initApp(result, fallbackWeek) {
@@ -1456,7 +1782,9 @@ function initApp(result, fallbackWeek) {
         ? "ซิงค์ข้อมูลล่าสุดสำเร็จแล้ว"
         : "ไม่พบข้อมูลงานในสัปดาห์นี้";
 
+    updateDispatchMeta();
     applyCurrentWeekData();
+    startPrefetchAllWeeks();
 }
 
 // ๐ 1. เน€เธกเธทเนเธญเน€เธฅเธทเธญเธเธชเธฑเธเธ”เธฒเธซเน (เธเธฐเธซเธฒเธงเนเธฒเธชเธฑเธเธ”เธฒเธซเนเธเธตเนเธกเธตเธเธตเน Rev เนเธฅเนเธงเน€เธญเธฒเธกเธฒเนเธเธงเน)
@@ -1590,7 +1918,7 @@ activeGroups=new Set(availableGroups);
 activeStatuses=new Set(STATUSES);
 
 buildFilters();
-setView('list'); // เธเธฑเธเธเธฑเธเนเธซเนเน€เธเนเธ List View เธ—เธธเธเธเธฃเธฑเนเธเธ—เธตเนเน€เธเธฅเธตเนเธขเธ Rev
+setView(viewMode);
 }
 
 function buildFilters() {
@@ -1651,6 +1979,7 @@ function setView(v) {
     document.getElementById('listView').classList.toggle('visible', v==='list');
     document.getElementById('btnWeek').classList.toggle('active', v==='week');
     document.getElementById('btnList').classList.toggle('active', v==='list');
+    setSidebarActive(v==='week' ? 'week' : 'list');
     render();
 }
 
@@ -1659,7 +1988,19 @@ function getFiltered() {
 
     return allData.filter(r=> {
             const d=(r.day||'').toUpperCase().substring(0, 3);
-            return activeDays.has(d) && activeGroups.has(r.group) && activeStatuses.has(r.status) && ( !q || (r.description||'').toLowerCase().includes(q) || (r.equipment||'').toLowerCase().includes(q));
+            const searchable=[
+                r.description,
+                r.equipment,
+                r.jobType,
+                r.moc,
+                r.group,
+                r.workType,
+                r.swp,
+                r.area,
+                r.resp
+            ].join(' ').toLowerCase();
+
+            return activeDays.has(d) && activeGroups.has(r.group) && activeStatuses.has(r.status) && (!q || searchable.includes(q));
         });
 }
 
@@ -1741,45 +2082,26 @@ function makeCard(t) {
     if(isSis) card.classList.add('is-sis');
     if(isCan) card.classList.add('task-cancelled');
 
-    let badges='';
-    if(isNew) badges+=`<span class="badge new-badge">NEW</span>`;
-    if(isCan) badges+=`<span class="badge cancel">CANCELLED</span>`;
-    if(isLoto) badges+=`<span class="badge loto">LOTO</span>`;
-    if(isSis) badges+=`<span class="badge sis">SIS</span>`;
+    let chips=`<span class="task-chip">${t.jobType || '-'}</span><span class="task-chip">${t.group || '-'}</span>`;
+    if(isNew) chips+=`<span class="task-chip is-danger">NEW</span>`;
+    if(isCan) chips+=`<span class="task-chip is-danger">CANCEL</span>`;
+    if(isLoto) chips+=`<span class="task-chip is-warn">LOTO</span>`;
+    if(isSis) chips+=`<span class="task-chip is-accent">SIS</span>`;
 
-    badges+=`<span class="badge plan">${
-        t.jobType || '-'
-    }
+    const refCode=(t.rev ? t.rev : 'REV') + ' • ' + (t.day || '-');
+    const description=t.description || '-';
 
-    </span>`;
-
-    badges+=`<span class="badge group">${
-        t.group || '-'
-    }
-
-    </span>`;
-
-    card.innerHTML=` <div class="task-type-row">${
-        badges
-    }
-
-    </div><div class="task-equip">${
-        t.equipment || 'N/A'
-    }
-
-    </div><div class="task-desc">${
-        t.description || '-'
-    }
-
-    </div><div class="task-footer"><div class="task-resp">${
-        t.resp || '-'
-    }
-
-    </div><div class="task-resp">${
-        t.area || '-'
-    }
-
-    </div></div>`;
+    card.innerHTML=`<div class="task-strip"></div>
+        <div class="task-card-inner">
+            <div class="task-meta-line">
+                <div class="task-ref">${refCode}</div>
+                <div class="task-ref">${formatShortDate(t.date || '')}</div>
+            </div>
+            <div class="task-equip">${t.equipment || 'N/A'}</div>
+            <div class="task-desc">${description}</div>
+            <div class="task-chip-row">${chips}</div>
+            <div class="task-footer"><div class="task-resp">${t.resp || '-'}</div><div class="task-resp">${t.area || '-'}</div></div>
+        </div>`;
     card.onclick=()=>openModal(t, isLoto, isSis, isNew, isCan);
     return card;
 }
