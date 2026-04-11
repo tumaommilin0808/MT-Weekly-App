@@ -488,7 +488,7 @@ main {
 
 .list-table {
     width: 100%;
-    min-width: 1100px;
+    min-width: 1240px;
     border-collapse: collapse;
     font-size: 13px;
 }
@@ -565,6 +565,59 @@ main {
     font-family: var(--mono);
     font-size: 11px;
     color: var(--muted);
+}
+
+.list-doc-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.list-doc-badge {
+    display: inline-flex;
+    width: fit-content;
+    max-width: 220px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 999px;
+    border: 1px solid #cbd5e1;
+    padding: 2px 8px;
+    color: #334155;
+    background: #f8fafc;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.list-doc-badge.tone-alert {
+    color: #b45309;
+    background: #fffbeb;
+    border-color: #fcd34d;
+}
+
+.list-doc-badge.tone-progress {
+    color: #0369a1;
+    background: #f0f9ff;
+    border-color: #7dd3fc;
+}
+
+.list-doc-badge.tone-ok {
+    color: #047857;
+    background: #ecfdf5;
+    border-color: #6ee7b7;
+}
+
+.list-doc-link {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    color: #1d4ed8;
+    text-decoration: none;
+}
+
+.list-doc-link:hover {
+    text-decoration: underline;
 }
 
 .modal-overlay {
@@ -647,6 +700,49 @@ main {
     color: var(--text);
     font-weight: 400;
     line-height: 1.5;
+}
+
+.modal-doc-badge {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 999px;
+    border: 1px solid #cbd5e1;
+    padding: 3px 9px;
+    color: #334155;
+    background: #f8fafc;
+}
+
+.modal-doc-badge.tone-alert {
+    color: #b45309;
+    background: #fffbeb;
+    border-color: #fcd34d;
+}
+
+.modal-doc-badge.tone-progress {
+    color: #0369a1;
+    background: #f0f9ff;
+    border-color: #7dd3fc;
+}
+
+.modal-doc-badge.tone-ok {
+    color: #047857;
+    background: #ecfdf5;
+    border-color: #6ee7b7;
+}
+
+.modal-doc-link {
+    color: #1d4ed8;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.modal-doc-link:hover {
+    text-decoration: underline;
 }
 
 #loading {
@@ -1557,6 +1653,66 @@ input:focus-visible {
     font-weight: 700;
 }
 
+.dispatch-frame .task-doc-row {
+    margin-top: 6px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.dispatch-frame .task-doc-badge {
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 999px;
+    border: 1px solid #cbd5e1;
+    padding: 2px 8px;
+    color: #334155;
+    background: #f8fafc;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dispatch-frame .task-doc-badge.tone-alert {
+    color: #b45309;
+    background: #fffbeb;
+    border-color: #fcd34d;
+}
+
+.dispatch-frame .task-doc-badge.tone-progress {
+    color: #0369a1;
+    background: #f0f9ff;
+    border-color: #7dd3fc;
+}
+
+.dispatch-frame .task-doc-badge.tone-ok {
+    color: #047857;
+    background: #ecfdf5;
+    border-color: #6ee7b7;
+}
+
+.dispatch-frame .task-doc-link {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    color: #1d4ed8;
+    text-decoration: none;
+    border: 1px solid #93c5fd;
+    background: #eff6ff;
+    border-radius: 999px;
+    padding: 2px 8px;
+}
+
+.dispatch-frame .task-doc-link:hover {
+    background: #dbeafe;
+}
+
 .dispatch-frame .task-card.area-cp .task-strip {
     background: #2563eb;
 }
@@ -1696,7 +1852,7 @@ body:not(.theme-light) .dispatch-nav-btn {
 }
 </style></head><body class="theme-light"><header><div class="logo"><div class="logo-icon">MT</div><div><div class="logo-text">WEEKLY SCHEDULING</div><div class="logo-sub" id="logoSub">Loading DB...</div></div></div><div class="header-right"><button class="theme-toggle" onclick="toggleTheme()"><span id="themeIcon">🌙 โหมดมืด</span></button><div class="realtime-clock"><div id="clockTime" style="font-size: 16px;">00:00:00</div><div id="clockDate" style="font-size: 11px; font-weight: 400; color: var(--muted); margin-top: 2px;">DD MMM YYYY</div></div><div class="header-stats" id="headerStats" style="display: flex; gap: 20px; align-items: center;"></div></div></header><div class="filter-bar"><span class="filter-label">Week</span><div class="week-selector-wrap" style="display:flex; gap:8px; margin-right: 10px;"><select id="weekSelect" onchange="changeWeek(this.value)"
 style="padding: 4px 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-family: var(--mono); font-size: 12px; cursor: pointer;"><option>Loading...</option></select><select id="revSelect" onchange="changeRev(this.value)"
-style="display:none; padding: 4px 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface2); color: var(--accent); font-family: var(--mono); font-size: 12px; cursor: pointer; font-weight: 600;"></select></div><span class="filter-label">Day</span><div class="filter-group" id="dayFilters"></div><div class="divider"></div><span class="filter-label">Group</span><div class="filter-group" id="groupFilters"></div><div class="divider"></div><span class="filter-label">Area</span><div class="filter-group" id="areaFilters"></div><div class="divider"></div><span class="filter-label">Status</span><div class="filter-group" id="statusFilters"></div><div style="margin-left:auto; display:flex; gap:10px; align-items:center;"><div class="view-toggle"><button class="view-btn" id="btnWeek" onclick="setView('week')">WEEK</button><button class="view-btn active" id="btnList" onclick="setView('list')">LIST</button></div><div class="search-wrap"><input type="text" id="searchInput" placeholder="ค้นหางาน, อุปกรณ์..." oninput="render()"></div></div></div><main><div id="loading">กำลังซิงค์ข้อมูลจากฐานข้อมูล...</div><div class="week-view-shell" id="weekViewShell"><div class="week-scroll-top" id="weekScrollTop"><div class="week-scroll-top-inner" id="weekScrollTopInner"></div></div><div class="week-grid-wrap" id="weekGridWrap"><div class="week-grid hidden" id="weekView"></div></div></div><div class="list-view" id="listView"><table class="list-table"><thead><tr><th>Day / Date</th><th>Type / MOC</th><th>Equipment</th><th>Work Description</th><th>Group</th><th>Work Type</th><th>SWP</th><th>Area</th><th>Resp.</th></tr></thead><tbody id="listBody"></tbody></table></div></main><div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)"><div class="modal" id="modal"><div class="modal-header"><div><div class="modal-title" id="modalTitle"></div></div><button class="modal-close" onclick="closeModalDirect()">✕</button></div><div class="modal-grid" id="modalGrid"></div></div></div><script> // --- Realtime Clock ---
+style="display:none; padding: 4px 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface2); color: var(--accent); font-family: var(--mono); font-size: 12px; cursor: pointer; font-weight: 600;"></select></div><span class="filter-label">Day</span><div class="filter-group" id="dayFilters"></div><div class="divider"></div><span class="filter-label">Group</span><div class="filter-group" id="groupFilters"></div><div class="divider"></div><span class="filter-label">Area</span><div class="filter-group" id="areaFilters"></div><div class="divider"></div><span class="filter-label">Status</span><div class="filter-group" id="statusFilters"></div><div style="margin-left:auto; display:flex; gap:10px; align-items:center;"><div class="view-toggle"><button class="view-btn" id="btnWeek" onclick="setView('week')">WEEK</button><button class="view-btn active" id="btnList" onclick="setView('list')">LIST</button></div><div class="search-wrap"><input type="text" id="searchInput" placeholder="ค้นหางาน, อุปกรณ์..." oninput="render()"></div></div></div><main><div id="loading">กำลังซิงค์ข้อมูลจากฐานข้อมูล...</div><div class="week-view-shell" id="weekViewShell"><div class="week-scroll-top" id="weekScrollTop"><div class="week-scroll-top-inner" id="weekScrollTopInner"></div></div><div class="week-grid-wrap" id="weekGridWrap"><div class="week-grid hidden" id="weekView"></div></div></div><div class="list-view" id="listView"><table class="list-table"><thead><tr><th>Day / Date</th><th>Type / MOC</th><th>Equipment</th><th>Work Description</th><th>Group</th><th>Work Type</th><th>SWP</th><th>Area</th><th>Doc</th><th>Resp.</th></tr></thead><tbody id="listBody"></tbody></table></div></main><div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)"><div class="modal" id="modal"><div class="modal-header"><div><div class="modal-title" id="modalTitle"></div></div><button class="modal-close" onclick="closeModalDirect()">✕</button></div><div class="modal-grid" id="modalGrid"></div></div></div><script> // --- Realtime Clock ---
 
 function updateClock() {
     const now=new Date();
@@ -1913,6 +2069,34 @@ function getSafetyMode(swpValue) {
     }
 
     return '';
+}
+
+function getDocMeta(task, safetyMode) {
+    if (!safetyMode) {
+        return { applicable: false, label: '-', tone: 'na', link: '' };
+    }
+
+    const status=(task.docStatus || task.documentStatus || task.doc_status || '').toString().trim();
+    const sign=(task.docSignStatus || task.documentSignStatus || task.doc_sign_status || '').toString().trim();
+    const rawLink=(task.docLink || task.documentLink || task.sharepointLink || task.doc_link || '').toString().trim();
+    const link=/^https?:\/\//i.test(rawLink) ? rawLink : '';
+
+    const combined=((status + ' ' + sign).trim() || 'PENDING').toUpperCase();
+    let tone='progress';
+
+    if (/SIGNED|APPROVED|COMPLETE|DONE|FINAL/.test(combined)) {
+        tone='ok';
+    } else if (/MISSING|NONE|PENDING|WAIT|NO DOC|NOT READY/.test(combined)) {
+        tone='alert';
+    }
+
+    let label='';
+    if (status && sign) label=status + ' / ' + sign;
+    else if (status) label=status;
+    else if (sign) label=sign;
+    else label='Pending Document';
+
+    return { applicable: true, label: label, tone: tone, link: link };
 }
 
 function sortAreas(values) {
@@ -2477,7 +2661,9 @@ function getFiltered() {
                 r.workType,
                 r.swp,
                 r.area,
-                r.resp
+                r.resp,
+                r.docStatus,
+                r.docSignStatus
             ].join(' ').toLowerCase();
 
             const areaValue=normalizeArea(r.area);
@@ -2560,6 +2746,7 @@ function makeCard(t) {
     const isNew=t.status==='NEW';
     const isCan=t.status==='CANCELLED';
     const areaClass=getAreaClass(t.area);
+    const docMeta=getDocMeta(t, safetyMode);
 
     card.className=`task-card status-${
         t.status.toLowerCase()
@@ -2586,6 +2773,13 @@ function makeCard(t) {
     const whenText=(t.day || '-') + ' • ' + formatShortDate(t.date || '');
     const revText=t.rev ? t.rev : 'REV';
     const description=t.description || '-';
+    const docBlock=docMeta.applicable ? `<div class="task-doc-row"><span class="task-doc-badge tone-${
+        docMeta.tone
+    }">${
+        docMeta.label
+    }</span>${
+        docMeta.link ? `<a class="task-doc-link" href="${docMeta.link}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">DOC</a>` : ''
+    }</div>` : '';
 
     card.innerHTML=`<div class="task-strip"></div>
         <div class="task-card-inner">
@@ -2596,6 +2790,7 @@ function makeCard(t) {
             <div class="task-equip">${t.equipment || 'N/A'}</div>
             <div class="task-desc">${description}</div>
             <div class="task-chip-row">${chips}</div>
+            ${docBlock}
             <div class="task-footer"><div class="task-resp">${t.group || '-'}</div><div class="task-resp">${t.area || '-'}</div></div>
         </div>`;
     card.onclick=()=>openModal(t, safetyMode, isSis, isNew, isCan);
@@ -2613,6 +2808,7 @@ function renderList(data) {
             const isSimpleLock=safetyMode==='simple-lock';
             const isLockTask=!!safetyMode;
             const isSis=(t.moc||'').toUpperCase().includes('SIS') || (t.jobType||'').toUpperCase().includes('SIS') || (t.group||'').toUpperCase().includes('SIS');
+            const docMeta=getDocMeta(t, safetyMode);
 
             const tr=document.createElement('tr');
             tr.className=`status-${t.status.toLowerCase()}`;
@@ -2626,6 +2822,9 @@ function renderList(data) {
 
             // ๐ เนเธเธฅเธเธงเธฑเธเธ—เธตเนเนเธซเนเธชเธฑเนเธเธฅเธเนเธเธซเธเนเธฒ List เธ”เนเธงเธข
             const cleanDate=formatShortDate(t.date);
+            const docCell=docMeta.applicable
+                ? `<div class="list-doc-wrap"><span class="list-doc-badge tone-${docMeta.tone}">${docMeta.label}</span>${docMeta.link ? `<a class="list-doc-link" href="${docMeta.link}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">OPEN</a>` : ''}</div>`
+                : '-';
 
             tr.innerHTML=` <td> <div class="list-day-box" > <span class="list-day" >${
                 t.day||'-'
@@ -2671,7 +2870,11 @@ function renderList(data) {
                 t.area||'-'
             }
 
-            </span></td> <td style="font-family:var(--mono);font-size:12px;color:var(--muted)" >${
+            </span></td> <td>${
+                docCell
+            }
+
+            </td> <td style="font-family:var(--mono);font-size:12px;color:var(--muted)" >${
                 t.resp||'-'
             }
 
@@ -2685,6 +2888,7 @@ function renderList(data) {
 function openModal(t, safetyMode, isSis, isNew, isCan) {
     const isLoto=safetyMode==='loto-lb';
     const isSimpleLock=safetyMode==='simple-lock';
+    const docMeta=getDocMeta(t, safetyMode);
     let badges='';
     if(isNew) badges+=`<span class="badge new-badge">NEW</span>`;
     if(isCan) badges+=`<span class="badge cancel">CANCELLED</span>`;
@@ -2767,6 +2971,22 @@ label: "SWP Document", value:t.swp||'-', full:true
 }
 
 ];
+
+if (docMeta.applicable) {
+    fields.push({
+        label: "Document Status",
+        value: `<span class="modal-doc-badge tone-${docMeta.tone}">${docMeta.label}</span>`,
+        full: true
+    });
+
+    if (docMeta.link) {
+        fields.push({
+            label: "Document Link",
+            value: `<a class="modal-doc-link" href="${docMeta.link}" target="_blank" rel="noopener noreferrer">เปิดเอกสาร</a>`,
+            full: true
+        });
+    }
+}
 
 document.getElementById('modalGrid').innerHTML=fields.map(f=> ` <div class="modal-field ${f.full?'full':''}" > <div class="field-label" >${
         f.label
