@@ -1520,7 +1520,7 @@ body:not(.theme-light) .dispatch-nav-btn {
 }
 </style></head><body class="theme-light"><header><div class="logo"><div class="logo-icon">MT</div><div><div class="logo-text">WEEKLY SCHEDULING</div><div class="logo-sub" id="logoSub">Loading DB...</div></div></div><div class="header-right"><button class="theme-toggle" onclick="toggleTheme()"><span id="themeIcon">🌙 โหมดมืด</span></button><div class="realtime-clock"><div id="clockTime" style="font-size: 16px;">00:00:00</div><div id="clockDate" style="font-size: 11px; font-weight: 400; color: var(--muted); margin-top: 2px;">DD MMM YYYY</div></div><div class="header-stats" id="headerStats" style="display: flex; gap: 20px; align-items: center;"></div></div></header><div class="filter-bar"><span class="filter-label">Week</span><div class="week-selector-wrap" style="display:flex; gap:8px; margin-right: 10px;"><select id="weekSelect" onchange="changeWeek(this.value)"
 style="padding: 4px 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-family: var(--mono); font-size: 12px; cursor: pointer;"><option>Loading...</option></select><select id="revSelect" onchange="changeRev(this.value)"
-style="display:none; padding: 4px 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface2); color: var(--accent); font-family: var(--mono); font-size: 12px; cursor: pointer; font-weight: 600;"></select></div><span class="filter-label">Day</span><div class="filter-group" id="dayFilters"></div><div class="divider"></div><span class="filter-label">Group</span><div class="filter-group" id="groupFilters"></div><div class="divider"></div><span class="filter-label">Status</span><div class="filter-group" id="statusFilters"></div><div style="margin-left:auto; display:flex; gap:10px; align-items:center;"><div class="view-toggle"><button class="view-btn" id="btnWeek" onclick="setView('week')">WEEK</button><button class="view-btn active" id="btnList" onclick="setView('list')">LIST</button></div><div class="search-wrap"><input type="text" id="searchInput" placeholder="ค้นหางาน, อุปกรณ์..." oninput="render()"></div></div></div><main><div id="loading">กำลังซิงค์ข้อมูลจากฐานข้อมูล...</div><div class="week-grid hidden" id="weekView"></div><div class="list-view" id="listView"><table class="list-table"><thead><tr><th>Day / Date</th><th>Type / MOC</th><th>Equipment</th><th>Work Description</th><th>Group</th><th>Work Type</th><th>SWP</th><th>Area</th><th>Resp.</th></tr></thead><tbody id="listBody"></tbody></table></div></main><div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)"><div class="modal" id="modal"><div class="modal-header"><div><div class="modal-title" id="modalTitle"></div></div><button class="modal-close" onclick="closeModalDirect()">✕</button></div><div class="modal-grid" id="modalGrid"></div></div></div><script> // --- Realtime Clock ---
+style="display:none; padding: 4px 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface2); color: var(--accent); font-family: var(--mono); font-size: 12px; cursor: pointer; font-weight: 600;"></select></div><span class="filter-label">Day</span><div class="filter-group" id="dayFilters"></div><div class="divider"></div><span class="filter-label">Group</span><div class="filter-group" id="groupFilters"></div><div class="divider"></div><span class="filter-label">Area</span><div class="filter-group" id="areaFilters"></div><div class="divider"></div><span class="filter-label">Status</span><div class="filter-group" id="statusFilters"></div><div style="margin-left:auto; display:flex; gap:10px; align-items:center;"><div class="view-toggle"><button class="view-btn" id="btnWeek" onclick="setView('week')">WEEK</button><button class="view-btn active" id="btnList" onclick="setView('list')">LIST</button></div><div class="search-wrap"><input type="text" id="searchInput" placeholder="ค้นหางาน, อุปกรณ์..." oninput="render()"></div></div></div><main><div id="loading">กำลังซิงค์ข้อมูลจากฐานข้อมูล...</div><div class="week-grid hidden" id="weekView"></div><div class="list-view" id="listView"><table class="list-table"><thead><tr><th>Day / Date</th><th>Type / MOC</th><th>Equipment</th><th>Work Description</th><th>Group</th><th>Work Type</th><th>SWP</th><th>Area</th><th>Resp.</th></tr></thead><tbody id="listBody"></tbody></table></div></main><div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)"><div class="modal" id="modal"><div class="modal-header"><div><div class="modal-title" id="modalTitle"></div></div><button class="modal-close" onclick="closeModalDirect()">✕</button></div><div class="modal-grid" id="modalGrid"></div></div></div><script> // --- Realtime Clock ---
 
 function updateClock() {
     const now=new Date();
@@ -1609,12 +1609,14 @@ const DAYS_ORDER=["MON",
 "SUN"];
 let availableDays=[];
 let availableGroups=[];
+let availableAreas=[];
 const STATUSES=["NEW",
 "NORMAL",
 "CANCELLED"];
 
 let activeDays=new Set();
 let activeGroups=new Set();
+let activeAreas=new Set();
 let activeStatuses=new Set(STATUSES);
 let viewMode='week';
 let currentWeek='';
@@ -1624,6 +1626,7 @@ let weekDataCache={};
 let allWeeksCache=[];
 let prefetchQueue=[];
 let isPrefetching=false;
+const AREA_PRIORITY=["CP","SSP/UT","ISBL"];
 
 const API_URL="https://script.google.com/macros/s/AKfycbxeSFFtpkmF_G46wUz35dFgx-Oz7IAS556fzrciqacnCAeloLOynZrlNAFL3aiiLxqg/exec";
 
@@ -1695,6 +1698,24 @@ function loadInitialData() {
 
 function renderOptionList(values) {
     return values.map(v=> `<option value="${v}">${v}</option>`).join('');
+}
+
+function normalizeArea(value) {
+    return (value || '-').toString()
+        .replace(/\s*\/\s*/g, '/')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toUpperCase();
+}
+
+function sortAreas(values) {
+    const priorityIndex=new Map(AREA_PRIORITY.map((v, i)=> [v, i]));
+    return [...values].sort((a, b)=> {
+            const ia=priorityIndex.has(a) ? priorityIndex.get(a) : Number.MAX_SAFE_INTEGER;
+            const ib=priorityIndex.has(b) ? priorityIndex.get(b) : Number.MAX_SAFE_INTEGER;
+            if (ia!==ib) return ia-ib;
+            return a.localeCompare(b);
+        });
 }
 
 function cloneTasks(tasks) {
@@ -1773,6 +1794,7 @@ function setSidebarActive(action) {
 function resetFiltersToAll() {
     activeDays=new Set(availableDays);
     activeGroups=new Set(availableGroups);
+    activeAreas=new Set(availableAreas);
     activeStatuses=new Set(STATUSES);
     document.getElementById('searchInput').value='';
     updateFilters();
@@ -2084,6 +2106,7 @@ function renderAfterDataChange() {
     const rawDays=[...new Set(allData.map(r=> (r.day||'').toUpperCase().substring(0, 3)))].filter(Boolean);
     availableDays=DAYS_ORDER.filter(d=> rawDays.includes(d));
     availableGroups=[...new Set(allData.map(r=> r.group))].filter(Boolean).sort();
+    availableAreas=sortAreas([...new Set(allData.map(r=> normalizeArea(r.area)))].filter(Boolean));
 
     const todayStr=new Date().toLocaleDateString('en-US', {
         weekday: 'short'
@@ -2104,6 +2127,7 @@ else {
 }
 
 activeGroups=new Set(availableGroups);
+activeAreas=new Set(availableAreas);
 activeStatuses=new Set(STATUSES);
 
 buildFilters();
@@ -2113,6 +2137,7 @@ setView(viewMode);
 function buildFilters() {
     buildGroup('dayFilters', availableDays, activeDays);
     buildGroup('groupFilters', availableGroups, activeGroups);
+    buildGroup('areaFilters', availableAreas, activeAreas);
     buildGroup('statusFilters', STATUSES, activeStatuses);
 }
 
@@ -2159,6 +2184,7 @@ function buildGroup(containerId, items, activeSet) {
 function updateFilters() {
     buildGroup('dayFilters', availableDays, activeDays);
     buildGroup('groupFilters', availableGroups, activeGroups);
+    buildGroup('areaFilters', availableAreas, activeAreas);
     buildGroup('statusFilters', STATUSES, activeStatuses);
 }
 
@@ -2189,7 +2215,8 @@ function getFiltered() {
                 r.resp
             ].join(' ').toLowerCase();
 
-            return activeDays.has(d) && activeGroups.has(r.group) && activeStatuses.has(r.status) && (!q || searchable.includes(q));
+            const areaValue=normalizeArea(r.area);
+            return activeDays.has(d) && activeGroups.has(r.group) && activeAreas.has(areaValue) && activeStatuses.has(r.status) && (!q || searchable.includes(q));
         });
 }
 
