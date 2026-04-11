@@ -1351,7 +1351,7 @@ function fetchWeeklyData(selectedWeek) {
         google.script.run
             .withSuccessHandler(result=> {
                 isWeekLoading=false;
-                initApp(result);
+                initApp(result, requestedWeek);
                 finishWeekLoading();
             })
             .withFailureHandler(err=> {
@@ -1372,7 +1372,7 @@ function fetchWeeklyData(selectedWeek) {
         })
         .then(result=> {
             isWeekLoading=false;
-            initApp(result);
+            initApp(result, requestedWeek);
             finishWeekLoading();
         })
         .catch(err=> {
@@ -1382,7 +1382,7 @@ function fetchWeeklyData(selectedWeek) {
         });
 }
 
-function initApp(result) {
+function initApp(result, fallbackWeek) {
     if ( !result || !Array.isArray(result.allTasks)) {
         document.getElementById('loading').innerText="เกิดข้อผิดพลาดในการโหลดข้อมูล";
         return;
@@ -1390,7 +1390,10 @@ function initApp(result) {
 
     fullDataStore=result.allTasks;
     const weeks=result.allWeeks || [];
-    currentWeek=result.selectedWeek || '';
+    currentWeek=result.selectedWeek || fallbackWeek || '';
+    if (!currentWeek && weeks.length > 0) {
+        currentWeek=weeks[0];
+    }
 
     const select=document.getElementById('weekSelect');
 
@@ -1399,6 +1402,8 @@ function initApp(result) {
 
         if (currentWeek) {
             select.value=currentWeek;
+        } else if (weeks.length > 0) {
+            select.value=weeks[0];
         }
     }
 
@@ -1430,7 +1435,10 @@ function changeWeek(selectedWeek) {
 }
 
 function applyCurrentWeekData() {
-    const weekTasks=fullDataStore;
+    const selectedWeek=currentWeek || document.getElementById('weekSelect').value || '';
+    const weekTasks=selectedWeek
+        ? fullDataStore.filter(t=> t.week===selectedWeek)
+        : fullDataStore;
 
     // เธซเธฒ Rev เธ—เธฑเนเธเธซเธกเธ”เธ—เธตเนเธกเธตเนเธเธชเธฑเธเธ”เธฒเธซเนเธเธตเน เนเธฅเนเธงเน€เธฃเธตเธขเธเธฅเธณเธ”เธฑเธ
     const revs=[...new Set(weekTasks.map(t=> t.rev))].filter(Boolean).sort();
@@ -1461,7 +1469,10 @@ function applyCurrentWeekData() {
 
 // ๐ 2. เน€เธกเธทเนเธญเน€เธฅเธทเธญเธ Rev เธขเนเธญเธข (เธฃเธฐเธเธเธเธฐเธ”เธถเธ Rev เธเนเธญเธเธซเธเนเธฒเธกเธฒเน€เธเธฃเธตเธขเธเน€เธ—เธตเธขเธเธซเธฒ NEW/CANCEL)
 function changeRev(selectedRev) {
-    const weekTasks=fullDataStore;
+    const selectedWeek=currentWeek || document.getElementById('weekSelect').value || '';
+    const weekTasks=selectedWeek
+        ? fullDataStore.filter(t=> t.week===selectedWeek)
+        : fullDataStore;
     const revs=[...new Set(weekTasks.map(t=> t.rev))].filter(Boolean).sort();
 
     // เธซเธฒเธงเนเธฒ Rev เธ—เธตเนเน€เธฃเธฒเน€เธฅเธทเธญเธเธญเธขเธนเนเธฅเธณเธ”เธฑเธเธ—เธตเนเน€เธ—เนเธฒเนเธซเธฃเน เธเธฐเนเธ”เนเนเธเธซเธฒ Rev เธ•เธฑเธงเธเนเธญเธเธซเธเนเธฒเธกเธฒเน€เธ—เธตเธขเธเธ–เธนเธ
