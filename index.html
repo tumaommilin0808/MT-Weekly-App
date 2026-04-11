@@ -1334,6 +1334,190 @@ body:not(.theme-light) .dispatch-frame .task-resp {
         padding: 16px 14px 26px;
     }
 }
+
+/* === Designer Refresh Layer (Readable + Comfortable) === */
+body {
+    background:
+        radial-gradient(900px 520px at 8% 4%, rgba(14, 165, 233, 0.2), transparent 60%),
+        radial-gradient(780px 420px at 98% 6%, rgba(59, 130, 246, 0.12), transparent 58%),
+        #dbe4ec;
+    padding: 18px;
+}
+
+.dispatch-shell {
+    gap: 16px;
+    min-height: calc(100vh - 36px);
+}
+
+.dispatch-sidebar {
+    width: 168px;
+    padding: 12px 10px;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #081327 0%, #0d2038 100%);
+}
+
+.dispatch-brand {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    margin-bottom: 2px;
+}
+
+.dispatch-side-title {
+    width: 100%;
+    color: #93c5fd;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin: 2px 0 8px;
+    text-align: left;
+}
+
+.dispatch-nav {
+    width: 100%;
+    gap: 7px;
+}
+
+.dispatch-nav-btn {
+    width: 100%;
+    height: 36px;
+    border-radius: 9px;
+    padding: 0 10px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    color: #dbeafe;
+    border-color: rgba(148, 163, 184, 0.26);
+}
+
+.dispatch-nav-btn:hover,
+.dispatch-nav-btn.active {
+    background: #1d4ed8;
+    color: #fff;
+}
+
+.dispatch-nav-btn:focus-visible,
+.view-btn:focus-visible,
+.filter-btn:focus-visible,
+.theme-toggle:focus-visible,
+select:focus-visible,
+input:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 1px;
+}
+
+.dispatch-board-top {
+    height: 50px;
+    padding: 0 16px;
+    background: rgba(255, 255, 255, 0.93);
+}
+
+.dispatch-board-title {
+    font-size: 14px;
+    color: #0f172a;
+}
+
+.dispatch-frame {
+    background: rgba(255, 255, 255, 0.94);
+}
+
+.dispatch-frame header {
+    height: 64px;
+    padding: 0 18px;
+    background: rgba(255, 255, 255, 0.96);
+}
+
+.dispatch-frame .filter-bar {
+    padding: 11px 18px;
+    background: rgba(248, 250, 252, 0.95);
+}
+
+.dispatch-frame main {
+    padding: 16px 18px 26px;
+    background: rgba(241, 245, 249, 0.88);
+}
+
+.dispatch-frame .week-grid {
+    grid-template-columns: repeat(7, minmax(240px, 1fr));
+    gap: 11px;
+    align-items: start;
+}
+
+.dispatch-frame .day-col {
+    border-radius: 10px;
+    border: 1px solid rgba(148, 163, 184, 0.32);
+    background: #f8fafc;
+}
+
+.dispatch-frame .day-header {
+    padding: 9px 10px;
+}
+
+.dispatch-frame .day-name {
+    font-size: 12px;
+    letter-spacing: 0.7px;
+}
+
+.dispatch-frame .day-tasks {
+    gap: 10px;
+    padding: 10px;
+}
+
+.dispatch-frame .task-card {
+    border-radius: 8px;
+}
+
+.dispatch-frame .task-card-inner {
+    padding: 10px 11px 11px;
+}
+
+.dispatch-frame .task-equip {
+    font-size: 13px;
+}
+
+.dispatch-frame .task-desc {
+    font-size: 12px;
+}
+
+.dispatch-frame .task-resp {
+    font-size: 10px;
+}
+
+body:not(.theme-light) .dispatch-frame {
+    background: rgba(15, 23, 42, 0.92);
+}
+
+body:not(.theme-light) .dispatch-frame main {
+    background: rgba(2, 6, 23, 0.56);
+}
+
+body:not(.theme-light) .dispatch-nav-btn {
+    color: #cbd5e1;
+}
+
+@media (max-width: 1240px) {
+    .dispatch-sidebar {
+        width: 142px;
+    }
+
+    .dispatch-frame .week-grid {
+        grid-template-columns: repeat(7, minmax(220px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 0;
+        background: var(--bg);
+    }
+
+    .dispatch-sidebar,
+    .dispatch-board-top {
+        display: none;
+    }
+}
 </style></head><body class="theme-light"><header><div class="logo"><div class="logo-icon">MT</div><div><div class="logo-text">WEEKLY SCHEDULING</div><div class="logo-sub" id="logoSub">Loading DB...</div></div></div><div class="header-right"><button class="theme-toggle" onclick="toggleTheme()"><span id="themeIcon">🌙 โหมดมืด</span></button><div class="realtime-clock"><div id="clockTime" style="font-size: 16px;">00:00:00</div><div id="clockDate" style="font-size: 11px; font-weight: 400; color: var(--muted); margin-top: 2px;">DD MMM YYYY</div></div><div class="header-stats" id="headerStats" style="display: flex; gap: 20px; align-items: center;"></div></div></header><div class="filter-bar"><span class="filter-label">Week</span><div class="week-selector-wrap" style="display:flex; gap:8px; margin-right: 10px;"><select id="weekSelect" onchange="changeWeek(this.value)"
 style="padding: 4px 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-family: var(--mono); font-size: 12px; cursor: pointer;"><option>Loading...</option></select><select id="revSelect" onchange="changeRev(this.value)"
 style="display:none; padding: 4px 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface2); color: var(--accent); font-family: var(--mono); font-size: 12px; cursor: pointer; font-weight: 600;"></select></div><span class="filter-label">Day</span><div class="filter-group" id="dayFilters"></div><div class="divider"></div><span class="filter-label">Group</span><div class="filter-group" id="groupFilters"></div><div class="divider"></div><span class="filter-label">Status</span><div class="filter-group" id="statusFilters"></div><div style="margin-left:auto; display:flex; gap:10px; align-items:center;"><div class="view-toggle"><button class="view-btn" id="btnWeek" onclick="setView('week')">WEEK</button><button class="view-btn active" id="btnList" onclick="setView('list')">LIST</button></div><div class="search-wrap"><input type="text" id="searchInput" placeholder="ค้นหางาน, อุปกรณ์..." oninput="render()"></div></div></div><main><div id="loading">กำลังซิงค์ข้อมูลจากฐานข้อมูล...</div><div class="week-grid hidden" id="weekView"></div><div class="list-view" id="listView"><table class="list-table"><thead><tr><th>Day / Date</th><th>Type / MOC</th><th>Equipment</th><th>Work Description</th><th>Group</th><th>Work Type</th><th>SWP</th><th>Area</th><th>Resp.</th></tr></thead><tbody id="listBody"></tbody></table></div></main><div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)"><div class="modal" id="modal"><div class="modal-header"><div><div class="modal-title" id="modalTitle"></div></div><button class="modal-close" onclick="closeModalDirect()">✕</button></div><div class="modal-grid" id="modalGrid"></div></div></div><script> // --- Realtime Clock ---
@@ -1463,21 +1647,22 @@ function buildDispatchChrome() {
     const sidebar=document.createElement('aside');
     sidebar.className='dispatch-sidebar';
     sidebar.innerHTML=`<div class="dispatch-brand">MT</div>
+        <div class="dispatch-side-title">Operations</div>
         <div class="dispatch-nav">
-            <button class="dispatch-nav-btn active" data-action="week" type="button" title="Week Board">WK</button>
-            <button class="dispatch-nav-btn" data-action="list" type="button" title="List View">LS</button>
-            <button class="dispatch-nav-btn" data-action="today" type="button" title="Today Only">TD</button>
-            <button class="dispatch-nav-btn" data-action="new" type="button" title="New Tasks">NW</button>
-            <button class="dispatch-nav-btn" data-action="cancelled" type="button" title="Cancelled Tasks">CN</button>
-            <button class="dispatch-nav-btn" data-action="loto" type="button" title="LOTO / Simple Lock">LO</button>
-            <button class="dispatch-nav-btn" data-action="reset" type="button" title="Reset Filters">RS</button>
-            <button class="dispatch-nav-btn" data-action="refresh" type="button" title="Reload Week">RF</button>
+            <button class="dispatch-nav-btn active" data-action="week" type="button" title="Week Board">Board</button>
+            <button class="dispatch-nav-btn" data-action="list" type="button" title="List View">Table</button>
+            <button class="dispatch-nav-btn" data-action="today" type="button" title="Today Only">Today</button>
+            <button class="dispatch-nav-btn" data-action="new" type="button" title="New Tasks">New</button>
+            <button class="dispatch-nav-btn" data-action="cancelled" type="button" title="Cancelled Tasks">Cancelled</button>
+            <button class="dispatch-nav-btn" data-action="loto" type="button" title="LOTO / Simple Lock">LOTO</button>
+            <button class="dispatch-nav-btn" data-action="reset" type="button" title="Reset Filters">Reset</button>
+            <button class="dispatch-nav-btn" data-action="refresh" type="button" title="Reload Week">Refresh</button>
         </div>`;
 
     const board=document.createElement('div');
     board.className='dispatch-board';
     board.innerHTML=`<div class="dispatch-board-top">
-            <div class="dispatch-board-title">Dispatch Board</div>
+            <div class="dispatch-board-title">Maintenance Operations Board</div>
             <div class="dispatch-board-meta" id="dispatchBoardMeta">MT Weekly Operations</div>
         </div>
         <div class="dispatch-frame"></div>`;
