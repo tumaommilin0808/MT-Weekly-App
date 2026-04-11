@@ -1852,7 +1852,7 @@ body:not(.theme-light) .dispatch-nav-btn {
 }
 </style></head><body class="theme-light"><header><div class="logo"><div class="logo-icon">MT</div><div><div class="logo-text">WEEKLY SCHEDULING</div><div class="logo-sub" id="logoSub">Loading DB...</div></div></div><div class="header-right"><button class="theme-toggle" onclick="toggleTheme()"><span id="themeIcon">🌙 โหมดมืด</span></button><div class="realtime-clock"><div id="clockTime" style="font-size: 16px;">00:00:00</div><div id="clockDate" style="font-size: 11px; font-weight: 400; color: var(--muted); margin-top: 2px;">DD MMM YYYY</div></div><div class="header-stats" id="headerStats" style="display: flex; gap: 20px; align-items: center;"></div></div></header><div class="filter-bar"><span class="filter-label">Week</span><div class="week-selector-wrap" style="display:flex; gap:8px; margin-right: 10px;"><select id="weekSelect" onchange="changeWeek(this.value)"
 style="padding: 4px 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-family: var(--mono); font-size: 12px; cursor: pointer;"><option>Loading...</option></select><select id="revSelect" onchange="changeRev(this.value)"
-style="display:none; padding: 4px 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface2); color: var(--accent); font-family: var(--mono); font-size: 12px; cursor: pointer; font-weight: 600;"></select></div><span class="filter-label">Day</span><div class="filter-group" id="dayFilters"></div><div class="divider"></div><span class="filter-label">Group</span><div class="filter-group" id="groupFilters"></div><div class="divider"></div><span class="filter-label">Area</span><div class="filter-group" id="areaFilters"></div><div class="divider"></div><span class="filter-label">Status</span><div class="filter-group" id="statusFilters"></div><div style="margin-left:auto; display:flex; gap:10px; align-items:center;"><div class="view-toggle"><button class="view-btn" id="btnWeek" onclick="setView('week')">WEEK</button><button class="view-btn active" id="btnList" onclick="setView('list')">LIST</button></div><div class="search-wrap"><input type="text" id="searchInput" placeholder="ค้นหางาน, อุปกรณ์..." oninput="render()"></div></div></div><main><div id="loading">กำลังซิงค์ข้อมูลจากฐานข้อมูล...</div><div class="week-view-shell" id="weekViewShell"><div class="week-scroll-top" id="weekScrollTop"><div class="week-scroll-top-inner" id="weekScrollTopInner"></div></div><div class="week-grid-wrap" id="weekGridWrap"><div class="week-grid hidden" id="weekView"></div></div></div><div class="list-view" id="listView"><table class="list-table"><thead><tr><th>Day / Date</th><th>Type / MOC</th><th>Equipment</th><th>Work Description</th><th>Group</th><th>Work Type</th><th>SWP</th><th>Area</th><th>Doc</th><th>Resp.</th></tr></thead><tbody id="listBody"></tbody></table></div></main><div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)"><div class="modal" id="modal"><div class="modal-header"><div><div class="modal-title" id="modalTitle"></div></div><button class="modal-close" onclick="closeModalDirect()">✕</button></div><div class="modal-grid" id="modalGrid"></div></div></div><script> // --- Realtime Clock ---
+style="display:none; padding: 4px 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface2); color: var(--accent); font-family: var(--mono); font-size: 12px; cursor: pointer; font-weight: 600;"></select></div><span class="filter-label">Day</span><div class="filter-group" id="dayFilters"></div><div class="divider"></div><span class="filter-label">Group</span><div class="filter-group" id="groupFilters"></div><div class="divider"></div><span class="filter-label">Area</span><div class="filter-group" id="areaFilters"></div><div class="divider"></div><span class="filter-label">Status</span><div class="filter-group" id="statusFilters"></div><div class="divider"></div><span class="filter-label">Doc</span><div class="filter-group" id="docFilters"></div><div style="margin-left:auto; display:flex; gap:10px; align-items:center;"><div class="view-toggle"><button class="view-btn" id="btnWeek" onclick="setView('week')">WEEK</button><button class="view-btn active" id="btnList" onclick="setView('list')">LIST</button></div><div class="search-wrap"><input type="text" id="searchInput" placeholder="ค้นหางาน, อุปกรณ์..." oninput="render()"></div></div></div><main><div id="loading">กำลังซิงค์ข้อมูลจากฐานข้อมูล...</div><div class="week-view-shell" id="weekViewShell"><div class="week-scroll-top" id="weekScrollTop"><div class="week-scroll-top-inner" id="weekScrollTopInner"></div></div><div class="week-grid-wrap" id="weekGridWrap"><div class="week-grid hidden" id="weekView"></div></div></div><div class="list-view" id="listView"><table class="list-table"><thead><tr><th>Day / Date</th><th>Type / MOC</th><th>Equipment</th><th>Work Description</th><th>Group</th><th>Work Type</th><th>SWP</th><th>Area</th><th>Doc</th><th>Resp.</th></tr></thead><tbody id="listBody"></tbody></table></div></main><div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)"><div class="modal" id="modal"><div class="modal-header"><div><div class="modal-title" id="modalTitle"></div></div><button class="modal-close" onclick="closeModalDirect()">✕</button></div><div class="modal-grid" id="modalGrid"></div></div></div><script> // --- Realtime Clock ---
 
 function updateClock() {
     const now=new Date();
@@ -1942,14 +1942,27 @@ const DAYS_ORDER=["MON",
 let availableDays=[];
 let availableGroups=[];
 let availableAreas=[];
+let availableDocStatuses=[];
 const STATUSES=["NEW",
 "NORMAL",
 "CANCELLED"];
+const DOC_STATUS_PRIORITY=[
+    "Missing Document",
+    "Pending Document",
+    "Draft Ready",
+    "In Review",
+    "For Signature",
+    "Signed",
+    "Link Attached",
+    "No Sign Required",
+    "N/A"
+];
 
 let activeDays=new Set();
 let activeGroups=new Set();
 let activeAreas=new Set();
 let activeStatuses=new Set(STATUSES);
+let activeDocStatuses=new Set();
 let viewMode='week';
 let currentWeek='';
 let isWeekLoading=false;
@@ -2073,7 +2086,7 @@ function getSafetyMode(swpValue) {
 
 function getDocMeta(task, safetyMode) {
     if (!safetyMode) {
-        return { applicable: false, label: '-', tone: 'na', link: '' };
+        return { applicable: false, label: '-', tone: 'na', link: '', statusLabel: '-', signLabel: '' };
     }
 
     const status=(task.docStatus || task.documentStatus || task.doc_status || '').toString().trim();
@@ -2081,22 +2094,51 @@ function getDocMeta(task, safetyMode) {
     const rawLink=(task.docLink || task.documentLink || task.sharepointLink || task.doc_link || '').toString().trim();
     const link=/^https?:\/\//i.test(rawLink) ? rawLink : '';
 
-    const combined=((status + ' ' + sign).trim() || 'PENDING').toUpperCase();
+    const docRaw=status.toUpperCase();
+    const signRaw=sign.toUpperCase();
+
+    let statusLabel='Pending Document';
+    if (/MISSING|NONE|NO DOC|N\/A/.test(docRaw)) statusLabel='Missing Document';
+    else if (/DRAFT|PREPARE|READY/.test(docRaw)) statusLabel='Draft Ready';
+    else if (/REVIEW|CHECK/.test(docRaw)) statusLabel='In Review';
+    else if (/SIGN|APPROVAL|APPROVE|WAIT/.test(docRaw)) statusLabel='For Signature';
+    else if (/SIGNED|APPROVED|FINAL|COMPLETE|DONE|RELEASE/.test(docRaw)) statusLabel='Signed';
+    else if (status) statusLabel=status;
+    else if (link) statusLabel='Link Attached';
+
+    let signLabel='';
+    if (/SIGNED|APPROVED|DONE|COMPLETE/.test(signRaw)) signLabel='Signed';
+    else if (/WAIT|PENDING|REQUEST|SEND/.test(signRaw)) signLabel='Pending Sign';
+    else if (/NOT REQUIRED|N\/A|NONE/.test(signRaw)) signLabel='No Sign Required';
+    else if (sign) signLabel=sign;
+    else if (statusLabel==='Signed') signLabel='Signed';
+    else signLabel='Pending Sign';
+
     let tone='progress';
+    if (statusLabel==='Signed' && signLabel==='Signed') tone='ok';
+    else if (statusLabel==='Missing Document' || statusLabel==='Pending Document') tone='alert';
 
-    if (/SIGNED|APPROVED|COMPLETE|DONE|FINAL/.test(combined)) {
-        tone='ok';
-    } else if (/MISSING|NONE|PENDING|WAIT|NO DOC|NOT READY/.test(combined)) {
-        tone='alert';
+    const label=statusLabel + (signLabel ? ' • ' + signLabel : '');
+    return { applicable: true, label: label, tone: tone, link: link, statusLabel: statusLabel, signLabel: signLabel };
+}
+
+function getDocStatusFilter(task) {
+    const safetyMode=getSafetyMode(task.swp);
+    if (!safetyMode) {
+        return 'N/A';
     }
+    const meta=getDocMeta(task, safetyMode);
+    return meta.statusLabel || 'Pending Document';
+}
 
-    let label='';
-    if (status && sign) label=status + ' / ' + sign;
-    else if (status) label=status;
-    else if (sign) label=sign;
-    else label='Pending Document';
-
-    return { applicable: true, label: label, tone: tone, link: link };
+function sortDocStatuses(values) {
+    const priorityIndex=new Map(DOC_STATUS_PRIORITY.map((v, i)=> [v, i]));
+    return [...values].sort((a, b)=> {
+            const ia=priorityIndex.has(a) ? priorityIndex.get(a) : Number.MAX_SAFE_INTEGER;
+            const ib=priorityIndex.has(b) ? priorityIndex.get(b) : Number.MAX_SAFE_INTEGER;
+            if (ia!==ib) return ia-ib;
+            return a.localeCompare(b);
+        });
 }
 
 function sortAreas(values) {
@@ -2187,6 +2229,7 @@ function resetFiltersToAll() {
     activeGroups=new Set(availableGroups);
     activeAreas=new Set(availableAreas);
     activeStatuses=new Set(STATUSES);
+    activeDocStatuses=new Set(availableDocStatuses);
     document.getElementById('searchInput').value='';
     updateFilters();
     render();
@@ -2500,6 +2543,7 @@ function renderAfterDataChange() {
     availableAreas=sortAreas([...new Set(allData.map(r=> normalizeArea(r.area)))]
         .filter(Boolean)
         .filter(area=> !AREA_HIDDEN.has(area)));
+    availableDocStatuses=sortDocStatuses([...new Set(allData.map(r=> getDocStatusFilter(r)))].filter(Boolean));
 
     const todayStr=new Date().toLocaleDateString('en-US', {
         weekday: 'short'
@@ -2522,6 +2566,7 @@ else {
 activeGroups=new Set(availableGroups);
 activeAreas=new Set(availableAreas);
 activeStatuses=new Set(STATUSES);
+activeDocStatuses=new Set(availableDocStatuses);
 
 buildFilters();
 setView(viewMode);
@@ -2532,6 +2577,7 @@ function buildFilters() {
     buildGroup('groupFilters', availableGroups, activeGroups);
     buildGroup('areaFilters', availableAreas, activeAreas);
     buildGroup('statusFilters', STATUSES, activeStatuses);
+    buildGroup('docFilters', availableDocStatuses, activeDocStatuses);
 }
 
 function buildGroup(containerId, items, activeSet) {
@@ -2579,6 +2625,7 @@ function updateFilters() {
     buildGroup('groupFilters', availableGroups, activeGroups);
     buildGroup('areaFilters', availableAreas, activeAreas);
     buildGroup('statusFilters', STATUSES, activeStatuses);
+    buildGroup('docFilters', availableDocStatuses, activeDocStatuses);
 }
 
 function setView(v) {
@@ -2663,12 +2710,14 @@ function getFiltered() {
                 r.area,
                 r.resp,
                 r.docStatus,
-                r.docSignStatus
+                r.docSignStatus,
+                r.docLink
             ].join(' ').toLowerCase();
 
             const areaValue=normalizeArea(r.area);
             const areaPass=AREA_HIDDEN.has(areaValue) ? true : activeAreas.has(areaValue);
-            return activeDays.has(d) && activeGroups.has(r.group) && areaPass && activeStatuses.has(r.status) && (!q || searchable.includes(q));
+            const docStatusValue=getDocStatusFilter(r);
+            return activeDays.has(d) && activeGroups.has(r.group) && areaPass && activeStatuses.has(r.status) && activeDocStatuses.has(docStatusValue) && (!q || searchable.includes(q));
         });
 }
 
@@ -2975,7 +3024,13 @@ label: "SWP Document", value:t.swp||'-', full:true
 if (docMeta.applicable) {
     fields.push({
         label: "Document Status",
-        value: `<span class="modal-doc-badge tone-${docMeta.tone}">${docMeta.label}</span>`,
+        value: `<span class="modal-doc-badge tone-${docMeta.tone}">${docMeta.statusLabel}</span>`,
+        full: true
+    });
+
+    fields.push({
+        label: "Sign Status",
+        value: `<span class="modal-doc-badge tone-${docMeta.tone}">${docMeta.signLabel}</span>`,
         full: true
     });
 
